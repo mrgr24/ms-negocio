@@ -5,4 +5,4 @@ Route.group(() => {
     Route.post("/combos", "CombosController.create");
     Route.put("/combos/:id", "CombosController.update");
     Route.delete("/combos/:id", "CombosController.delete");
-}).middleware(["security"]);
+});

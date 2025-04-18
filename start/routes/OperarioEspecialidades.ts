@@ -5,4 +5,4 @@ Route.group(() => {
     Route.post("/operario_especialidades", "OperarioEspecialidadesController.create");
     Route.put("/operario_especialidades/:id", "OperarioEspecialidadesController.update");
     Route.delete("/operario_especialidades/:id", "OperarioEspecialidadesController.delete");
-}).middleware(["security"]);
+});
