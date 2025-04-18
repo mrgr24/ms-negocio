@@ -30,7 +30,7 @@ export default class MantenimientosController {
         const body = request.body();
         theMantenimiento.fecha = body.fecha;
         theMantenimiento.estado = body.estado;
-        theMantenimiento.maquinaId = body.maquinaId;
+        theMantenimiento.maquina_id = body.maquinaId;
         return await theMantenimiento.save();
     }
 

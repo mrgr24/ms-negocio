@@ -19,9 +19,11 @@ export default class Novedad extends BaseModel {
   public gravedad: string
 
   @column()
-  public turnoId: number  
+  public turno_id: number  
 
-  @belongsTo(() => Turno)
+  @belongsTo(() => Turno, {
+    foreignKey: 'turno_id',
+  })
   public turno: BelongsTo<typeof Turno>
 
   @column.dateTime({ autoCreate: true })
