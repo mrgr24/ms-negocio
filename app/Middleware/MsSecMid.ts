@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
 
+
 export default class MsSecMid {
   public async handle({ request, response }: HttpContextContract, next: () => Promise<void>) {
     const theRequest = request.toJSON()
