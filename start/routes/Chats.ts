@@ -5,4 +5,4 @@ Route.group(() => {
     Route.post("/chats", "ChatsController.create");
     Route.put("/chats/:id", "ChatsController.update");
     Route.delete("/chats/:id", "ChatsController.delete");
-}).middleware(["security"]);
+});
