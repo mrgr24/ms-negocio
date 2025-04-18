@@ -32,7 +32,7 @@ export default class NovedadesController {
         theNovedad.descripcion = body.descripcion;
         theNovedad.evidencia = body.evidencia;
         theNovedad.gravedad = body.gravedad;
-        theNovedad.turnoId = body.turnoId;
+        theNovedad.turno_id = body.turnoId;
         return await theNovedad.save();
     }
 

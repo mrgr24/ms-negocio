@@ -27,8 +27,8 @@ export default class OperarioEspecialidadesController {
   public async update({ params, request }: HttpContextContract) {
     const operarioEspecialidad = await OperarioEspecialidad.findOrFail(params.id)
     const body = request.body()
-    operarioEspecialidad.operarioId = body.operarioId
-    operarioEspecialidad.especialidadId = body.especialidadId
+    operarioEspecialidad.operario_id = body.operarioId
+    operarioEspecialidad.especialidad_id = body.especialidadId
     return await operarioEspecialidad.save()
   }
 
@@ -39,8 +39,8 @@ export default class OperarioEspecialidadesController {
   }
 
   public async assignSpecialty({ request }: HttpContextContract) {
-    const { operarioId, especialidadId } = request.body()
-    const operarioEspecialidad = await OperarioEspecialidad.create({ operarioId, especialidadId })
+    const { operario_id, especialidad_id } = request.body()
+    const operarioEspecialidad = await OperarioEspecialidad.create({ operario_id, especialidad_id })
     return operarioEspecialidad
   }
 }

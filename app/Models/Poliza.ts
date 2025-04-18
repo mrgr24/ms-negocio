@@ -1,25 +1,27 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Operario from 'App/Models/Operario'
 import Maquina from 'App/Models/Maquina'
-import Novedad from 'App/Models/Novedad'
+import Seguro from 'App/Models/Seguro'
 
-export default class Turno extends BaseModel {
+export default class Poliza extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column() 
-  public fecha: DateTime
+  @column()
+  public maquina_id: number | null
 
   @column()
-  public hora: DateTime
+  public operario_id: number | null
 
   @column()
-  public operario_id: number
+  public seguro_id: number
 
   @column()
-  public maquina_id: number
+  public fechaInicio: DateTime
 
+  @column()
+  public fechaFin: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -37,8 +39,8 @@ export default class Turno extends BaseModel {
   })
   public maquina: BelongsTo<typeof Maquina>
 
-  @hasMany(() => Novedad,{
-    foreignKey: 'turno_id',
+  @belongsTo(() => Seguro,{
+    foreignKey: 'seguro_id',
   })
-  public novedades: HasMany<typeof Novedad>
+  public seguro: BelongsTo<typeof Seguro>
 }

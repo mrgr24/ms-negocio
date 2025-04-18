@@ -1,19 +1,19 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Turno from 'App/Models/Turno';
+import Gp from 'App/Models/Gp';
 
-export default class TurnosController {
+export default class GpsController {
     public async find({ request, params }: HttpContextContract) {
         if (params.id) {
-            let theTurno: Turno = await Turno.findOrFail(params.id)
-            return theTurno;
+            let theGp: Gp = await Gp.findOrFail(params.id)
+            return theGp;
         } else {
             const data = request.all()
             if ("page" in data && "per_page" in data) {
                 const page = request.input('page', 1);
                 const perPage = request.input("per_page", 20);
-                return await Turno.query().paginate(page, perPage)
+                return await Gp.query().paginate(page, perPage)
             } else {
-                return await Turno.query()
+                return await Gp.query()
             }
 
         }
@@ -21,23 +21,21 @@ export default class TurnosController {
     }
     public async create({ request }: HttpContextContract) {
         const body = request.body();
-        const theTurno: Turno = await Turno.create(body);
-        return theTurno;
+        const theGp: Gp = await Gp.create(body);
+        return theGp;
     }
 
     public async update({ params, request }: HttpContextContract) {
-        const theTurno: Turno = await Turno.findOrFail(params.id);
+        const theGp: Gp = await Gp.findOrFail(params.id);
         const body = request.body();
-        theTurno.fecha = body.fecha;
-        theTurno.hora = body.hora;
-        theTurno.operario_id = body.operarioId;
-        theTurno.maquina_id = body.maquinaId;
-        return await theTurno.save();
+        theGp.latitud = body.latitud;
+        theGp.longitud = body.longitud;
+        return await theGp.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
-        const theTurno: Turno = await Turno.findOrFail(params.id);
+        const theGp: Gp = await Gp.findOrFail(params.id);
             response.status(204);
-            return await theTurno.delete();
+            return await theGp.delete();
     }
 }
