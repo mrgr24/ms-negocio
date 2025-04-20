@@ -12,9 +12,6 @@ export default class Chat extends BaseModel {
   @column()
   public tipo: string
 
-  @column()
-  public chatId: string
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -22,7 +19,7 @@ export default class Chat extends BaseModel {
   public updatedAt: DateTime
 
   @hasMany(() => Mensaje, {
-    foreignKey: 'mensajeId',
+    foreignKey: 'chat_id',
   })
   public mensajes: HasMany<typeof Mensaje>
 }

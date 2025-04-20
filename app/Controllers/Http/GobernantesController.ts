@@ -30,6 +30,8 @@ export default class GobernantesController {
         const body = request.body();
         theGobernante.periodoInit = body.periodoInit;
         theGobernante.periodoEnd = body.periodoEnd;
+        theGobernante.idMunicipio = body.idMunicipio;
+        theGobernante.idDepartamento = body.idDepartamento;
         return await theGobernante.save();
     }
 

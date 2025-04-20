@@ -29,6 +29,7 @@ export default class ObrasController {
         const theObra: Obra = await Obra.findOrFail(params.id);
         const body = request.body();
         theObra.nombre = body.nombre;
+        theObra.combo_id = body.combo_id;
         return await theObra.save();
     }
 

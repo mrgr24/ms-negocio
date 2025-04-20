@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('Modelo').notNullable()
       table.string('Estado').notNullable()
       table.string('Ubicacion').notNullable()
+      table.boolean('Disponibilidad').notNullable().defaultTo(true)
       
 
       /**

@@ -29,6 +29,7 @@ export default class FacturasController {
         const theFactura: Factura = await Factura.findOrFail(params.id);
         const body = request.body();
         theFactura.detalle = body.detalle;
+        theFactura.idCuota = body.idCuota;
         return await theFactura.save();
     }
 

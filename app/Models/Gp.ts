@@ -11,9 +11,18 @@ export default class Gp extends BaseModel {
   @column()
   public longitud: string
 
+  @column()
+  public maquina_id: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  //se puede poner bidireccional
+  // @belongsTo(() => Maquina, {
+  //   foreignKey: 'maquina_id',
+  // })
+  // public maquina: BelongsTo<typeof Maquina>
 }

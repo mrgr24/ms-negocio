@@ -33,6 +33,7 @@ export default class MaquinasController {
         theMaquina.modelo = body.modelo;
         theMaquina.estado = body.estado;
         theMaquina.ubicacion = body.ubicacion;
+        theMaquina.disponibilidad = body.disponibilidad;
         return await theMaquina.save();
     }
 

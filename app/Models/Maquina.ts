@@ -1,9 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import Operario from 'App/Models/Operario'
 import TipoServicio from './TipoServicio'
 import Poliza from './Poliza'
 import Combo from './Combo'
+import Gp from './Gp'
+import Mantenimiento from './Mantenimiento'
+import Seguro from './Seguro'
 
 export default class Maquina extends BaseModel {
   @column({ isPrimary: true })
@@ -24,6 +27,15 @@ export default class Maquina extends BaseModel {
   @column()
   public ubicacion: string
 
+  @column()
+  public disponibilidad: boolean
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime
+
   @manyToMany(() => Operario, {
     pivotTable: 'turnos',
     pivotForeignKey: 'maquina_id',
@@ -33,7 +45,7 @@ export default class Maquina extends BaseModel {
 
   @manyToMany(() => TipoServicio, {
     pivotTable: 'especialidad_maquinarias',
-    pivotForeignKey: 'tipo_servicio_id',
+    pivotForeignKey: 'maquina_id',
     pivotRelatedForeignKey: 'tipo_servicio_id',
   })
   public especialidades: ManyToMany<typeof TipoServicio>
@@ -45,14 +57,20 @@ export default class Maquina extends BaseModel {
   })
   public combos: ManyToMany<typeof Combo>
 
-  @hasMany(() => Poliza, {
+  @hasOne(() => Gp, {
     foreignKey: 'maquina_id',
   })
-  public polizas: HasMany<typeof Poliza> // Cambiado a tipo correcto
+  public gp: HasOne<typeof Gp> 
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  @hasMany (() => Mantenimiento, {
+    foreignKey: 'maquina_id',
+  })
+  public mantenimientos: HasMany<typeof Mantenimiento>
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  @manyToMany(() => Seguro, {
+    pivotTable: 'polizas',
+    pivotForeignKey: 'maquina_id',
+    pivotRelatedForeignKey: 'seguro_id',
+  })
+  public seguros: ManyToMany<typeof Seguro>
 }

@@ -8,8 +8,8 @@ export default class Cuota extends BaseModel {
   public id: number
 
   @column()
-  public idFactura: number
-  
+  public idServicio: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

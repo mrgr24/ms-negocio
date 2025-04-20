@@ -10,7 +10,7 @@ export default class Obra extends BaseModel {
   public nombre: string
 
   @column()
-  public municipio_id: number
+  public combo_id: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -19,7 +19,7 @@ export default class Obra extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Municipio, {
-    pivotTable: 'obrasMunicipio',
+    pivotTable: 'obras_municipios',
     pivotForeignKey: 'obra_id',
     pivotRelatedForeignKey: 'municipio_id',
   })
