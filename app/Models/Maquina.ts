@@ -3,6 +3,7 @@ import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany } from '@io
 import Operario from 'App/Models/Operario'
 import TipoServicio from './TipoServicio'
 import Poliza from './Poliza'
+import Combo from './Combo'
 
 export default class Maquina extends BaseModel {
   @column({ isPrimary: true })
@@ -36,6 +37,13 @@ export default class Maquina extends BaseModel {
     pivotRelatedForeignKey: 'tipo_servicio_id',
   })
   public especialidades: ManyToMany<typeof TipoServicio>
+
+  @manyToMany(() => Combo, {
+    pivotTable: 'maquinas_combos',
+    pivotForeignKey: 'maquina_id',
+    pivotRelatedForeignKey: 'combo_id',
+  })
+  public combos: ManyToMany<typeof Combo>
 
   @hasMany(() => Poliza, {
     foreignKey: 'maquina_id',

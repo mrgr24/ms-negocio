@@ -1,20 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-export default class Factura extends BaseModel {
+export default class Combo extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
-  public detalle: string
-
-  @column()
-  public idCuota: number
-  
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
 }

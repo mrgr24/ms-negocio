@@ -8,14 +8,7 @@ export default class Cuota extends BaseModel {
   public id: number
 
   @column()
-  public cuotaID: number
-
-  @column()
-  public idServicio: number
-
-  @column()
   public idFactura: number
-
   
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -24,7 +17,7 @@ export default class Cuota extends BaseModel {
   public updatedAt: DateTime
 
   @hasOne(() => Factura, {
-    foreignKey: 'idFactura',
+    foreignKey: 'idCuota',
   })
   public factura: HasOne<typeof Factura>  
 

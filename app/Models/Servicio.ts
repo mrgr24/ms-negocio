@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Cuota from './Cuota'
 import Evidencia from './Evidencia'
+import Combo from './Combo'
 
 export default class Servicio extends BaseModel {
   @column({ isPrimary: true })
@@ -32,9 +33,6 @@ export default class Servicio extends BaseModel {
   public resumen: string
 
   @column()
-  public idCuota: number
-
-  @column()
   public idEvidencia: number
 
   @column.dateTime({ autoCreate: true })
@@ -44,12 +42,17 @@ export default class Servicio extends BaseModel {
   public updatedAt: DateTime
 
   @hasMany(() => Cuota, {
-    foreignKey: 'idCuota',
+    foreignKey: 'idServicio',
   })
   public cuota: HasMany<typeof Cuota>
 
   @hasMany(() => Evidencia, {
-    foreignKey: 'idEvidencia',
+    foreignKey: 'idServicio',
   })
   public evidencia: HasMany<typeof Evidencia>
+
+  @hasOne(() => Combo, {
+    foreignKey: 'idServicio',
+  })
+  public combo: HasOne<typeof Combo>
 }
