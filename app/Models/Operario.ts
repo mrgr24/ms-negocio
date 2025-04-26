@@ -2,9 +2,10 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany } from '@ioc:Adonis/Lucid/Orm' 
 import Especialidad from 'App/Models/Especialidad'
 import Maquina from 'App/Models/Maquina'
-import Poliza from 'App/Models/Poliza'
+import Seguro from './Seguro'
+import Usuario from './Usuario'
 
-export default class Operario extends BaseModel {
+export default class Operario extends Usuario {
   @column({ isPrimary: true })
   public id: number
 
@@ -31,8 +32,11 @@ export default class Operario extends BaseModel {
   })
   public maquinas: ManyToMany<typeof Maquina>
 
-  @hasMany(() => Poliza, {
-    foreignKey: 'operario_id',
+  @manyToMany(() => Seguro, {
+    pivotTable: 'polizas',
+    pivotForeignKey: 'operario_id',
+    pivotRelatedForeignKey: 'seguro_id',
   })
-  public polizas: HasMany<typeof Poliza>
+  public seguros: ManyToMany<typeof Seguro>
+
 }

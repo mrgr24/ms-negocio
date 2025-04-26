@@ -21,14 +21,14 @@ export default class Novedad extends BaseModel {
   @column()
   public turno_id: number  
 
-  @belongsTo(() => Turno, {
-    foreignKey: 'turno_id',
-  })
-  public turno: BelongsTo<typeof Turno>
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @belongsTo(() => Turno, {
+    foreignKey: 'turno_id',
+  })
+  public turno: BelongsTo<typeof Turno>
 }

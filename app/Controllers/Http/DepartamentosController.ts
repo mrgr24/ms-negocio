@@ -29,7 +29,6 @@ export default class DepartamentosController {
         const theDepartamento: Departamento = await Departamento.findOrFail(params.id);
         const body = request.body();
         theDepartamento.nombre = body.nombre;
-        theDepartamento.idGobernante = body.idGobernante;
         // Foreign key to Gobernante table
         return await theDepartamento.save();
     }

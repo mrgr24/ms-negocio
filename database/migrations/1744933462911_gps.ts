@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('latitud').notNullable()
       table.string('longitud').notNullable()
+      table.integer('maquina_id').unsigned().references('id').inTable('maquinas').onDelete('CASCADE').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

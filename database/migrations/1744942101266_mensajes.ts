@@ -9,8 +9,8 @@ export default class extends BaseSchema {
       table.string('contenido').notNullable()
       table.date('fecha').notNullable()
       table.time('hora').notNullable()
-      table.integer('chatId').notNullable().unsigned().references('id').inTable('chats').onDelete('CASCADE'),
-      table.integer('usuarioId').notNullable().unsigned().references('id').inTable('usuarios').onDelete('CASCADE'),
+      table.integer('chat_id').notNullable().unsigned().references('id').inTable('chats').onDelete('CASCADE'),
+      table.integer('usuario_id').notNullable().unsigned().references('id').inTable('usuarios').onDelete('CASCADE'),
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

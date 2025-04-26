@@ -30,6 +30,7 @@ export default class GpsController {
         const body = request.body();
         theGp.latitud = body.latitud;
         theGp.longitud = body.longitud;
+        theGp.maquina_id = body.maquina_id;
         return await theGp.save();
     }
 

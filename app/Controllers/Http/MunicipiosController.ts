@@ -29,7 +29,7 @@ export default class MunicipiosController {
         const theMunicipio: Municipio = await Municipio.findOrFail(params.id);
         const body = request.body();
         theMunicipio.nombre = body.nombre;
-        theMunicipio.idDepartamento = body.idDepartamento;
+        theMunicipio.idDepartamento = body.idDepartamento;  // Foreign key to Departamento table 
         // Foreign key to Departamento table
         return await theMunicipio.save();
     }

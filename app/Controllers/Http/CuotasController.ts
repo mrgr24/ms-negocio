@@ -28,6 +28,7 @@ export default class CuotasController {
     public async update({ params, request }: HttpContextContract) {
         const theCuota: Cuota = await Cuota.findOrFail(params.id);
         const body = request.body();
+        theCuota.idServicio = body.idServicio;
         return await theCuota.save();
     }
 

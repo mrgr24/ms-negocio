@@ -9,11 +9,6 @@ export default class Departamento extends BaseModel {
   @column()
   public nombre: string
 
-  @column()
-  public idGobernante: number
-  // Foreign key to Gobernante table
-
-
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -21,7 +16,7 @@ export default class Departamento extends BaseModel {
   public updatedAt: DateTime
 
   @hasOne (() => Gobernante, {
-    foreignKey: 'idGobernante',
+    foreignKey: 'idDepartamento', 
 }
   )
   public gobernante: HasOne<typeof Gobernante>

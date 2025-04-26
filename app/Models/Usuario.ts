@@ -14,9 +14,6 @@ export default class Usuario extends BaseModel {
 
   @column()
   public nombre: string
-
-  @column()
-  public mensajeId: number
   
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -25,7 +22,7 @@ export default class Usuario extends BaseModel {
   public updatedAt: DateTime
 
   @hasMany(() => Mensaje, {
-    foreignKey: 'mensajeId',
+    foreignKey: 'usuario_id',
   })
   public mensajes: HasMany<typeof Mensaje> // Cambiado a tipo correcto
 }
