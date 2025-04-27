@@ -52,4 +52,5 @@ import './routes/Procedimientos'
 import './routes/Operarios'
 import './routes/OperarioEspecialidades'
 import './routes/MaquinaCombos'
-
+import './routes/GobernantesDepartamentos'
+import './routes/GobernantesMunicipios'
