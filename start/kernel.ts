@@ -7,5 +7,5 @@ Server.middleware.register([
 
 
 Server.middleware.registerNamed({
-  Security: () => import('App/Middleware/MsSecMid'),
+  MsSecMid: () => import('App/Middleware/MsSecMid'),
 })
