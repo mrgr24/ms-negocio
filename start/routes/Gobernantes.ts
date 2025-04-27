@@ -5,4 +5,5 @@ Route.group(() => {
     Route.post("/gobernantes", "GobernantesController.create");
     Route.put("/gobernantes/:id", "GobernantesController.update");
     Route.delete("/gobernantes/:id", "GobernantesController.delete");
-});
+})
+.middleware('MsSecMid') 

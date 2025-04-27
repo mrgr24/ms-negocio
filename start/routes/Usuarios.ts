@@ -6,4 +6,4 @@ Route.group(() => {
   Route.put('/usuarios/:id', 'UsuariosController.update')
   Route.delete('/usuarios/:id', 'UsuariosController.delete')
 })
-.middleware(['MsSecMid']) // Aplica el middleware de seguridad
+.middleware('MsSecMid') // Aplica el middleware de seguridad

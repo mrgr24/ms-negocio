@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Obra from './Obra'
 import Gobernante from './Gobernante'
 
@@ -20,11 +20,13 @@ export default class Municipio extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @hasMany (() => Gobernante, {
-    foreignKey: 'idMunicipio',
-    })
-  public gobernantes: HasMany<typeof Gobernante>
-  // Foreign key to Gobernante table
+  @manyToMany(() => Gobernante, {
+    pivotTable: 'gobernadores_municipios',
+    pivotForeignKey: 'municipio_id',
+    pivotRelatedForeignKey: 'gobernante_id',
+  })
+  public gobernantes: ManyToMany<typeof Gobernante>
+
   
   @manyToMany (() => Obra, {
     pivotTable : 'obras_municipios',
