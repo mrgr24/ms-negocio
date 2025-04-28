@@ -10,6 +10,9 @@ export default class Operario extends Usuario {
   public id: number
 
   @column()
+  public user_id: string
+
+  @column()
   public experiencia: string
 
   @column.dateTime({ autoCreate: true })

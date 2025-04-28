@@ -4,7 +4,10 @@ import Maquina from 'App/Models/Maquina';
 export default class MaquinasController {
     public async find({ request, params }: HttpContextContract) {
         if (params.id) {
-            let theMaquina: Maquina = await Maquina.findOrFail(params.id)
+            const theMaquina = await Maquina.query()
+            .where('id', params.id)
+            .firstOrFail()
+
             return theMaquina;
         } else {
             const data = request.all()

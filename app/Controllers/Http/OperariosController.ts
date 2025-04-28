@@ -1,40 +1,118 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Operario from 'App/Models/Operario';
+import Operario from 'App/Models/Operario'
+import axios from 'axios'
+import Env from '@ioc:Adonis/Core/Env'
+
+interface User {
+  _id: string
+  name: string
+  email: string
+}
 
 export default class OperariosController {
-    public async find({ request, params }: HttpContextContract) {
-        if (params.id) {
-            let theOperario: Operario = await Operario.findOrFail(params.id)
-            return theOperario;
-        } else {
-            const data = request.all()
-            if ("page" in data && "per_page" in data) {
-                const page = request.input('page', 1);
-                const perPage = request.input("per_page", 20);
-                return await Operario.query().paginate(page, perPage)
-            } else {
-                return await Operario.query()
-            }
+  // Crear un operario
+  public async create({ request, response }: HttpContextContract) {
+    const { user_id, experiencia } = request.only(['user_id', 'experiencia'])
 
+    // Verificar si el usuario existe en ms-security
+    let user: User
+    try {
+      const userResponse = await axios.get<User>(`${Env.get('MS_SECURITY')}/api/users/${user_id}`, {
+        headers: {
+          Authorization: request.header('Authorization'), // Pasar el token si es necesario
+        },
+      })
+      user = userResponse.data
+    } catch (error) {
+      return response.status(404).send({ message: 'El usuario no existe en ms-security', error: error.response?.data || error.message })
+    }
+
+    // Crear el operario en ms-negocio
+    const operario = await Operario.create({
+      user_id: user._id, // Asociar el operario al usuario existente
+      experiencia,
+    })
+
+    return response.status(201).send({
+      id: operario.id,
+      name: user.name,
+      email: user.email,
+      experiencia: operario.experiencia,
+    })
+  }
+
+  // Obtener operarios
+  public async find({ request, params }: HttpContextContract) {
+    const token = request.header('Authorization')?.replace('Bearer ', '')
+
+    if (params.id) {
+      // Obtener un operario específico
+      const operario = await Operario.findOrFail(params.id)
+
+      // Obtener datos del usuario desde ms-security
+      let user: User
+      try {
+        const userResponse = await axios.get<User>(`${Env.get('MS_SECURITY')}/api/users/${operario.user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        user = userResponse.data
+      } catch (error) {
+        return { message: 'Error al obtener el usuario desde ms-security', error: error.response?.data || error.message }
+      }
+
+      return {
+        id: operario.id,
+        name: user.name,
+        email: user.email,
+        experiencia: operario.experiencia,
+      }
+    } else {
+      // Obtener todos los operarios
+      const operarios = await Operario.all()
+
+      // Obtener datos de todos los usuarios desde ms-security
+      let users: User[] = []
+      try {
+        const usersResponse = await axios.get<User[]>(`${Env.get('MS_SECURITY')}/api/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        users = usersResponse.data
+      } catch (error) {
+        return { message: 'Error al obtener los usuarios desde ms-security', error: error.response?.data || error.message }
+      }
+
+      // Combinar datos de operarios con usuarios
+      return operarios.map((operario) => {
+        const user = users.find((u) => u._id === operario.user_id)
+        return {
+          id: operario.id,
+          name: user?.name || 'Usuario no encontrado',
+          email: user?.email || 'Usuario no encontrado',
+          experiencia: operario.experiencia,
         }
+      })
+    }
+  }
 
-    }
-    public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theOperario: Operario = await Operario.create(body);
-        return theOperario;
-    }
+  // Actualizar un operario
+  public async update({ params, request }: HttpContextContract) {
+    const operario = await Operario.findOrFail(params.id)
+    const { experiencia } = request.only(['experiencia'])
 
-    public async update({ params, request }: HttpContextContract) {
-        const theOperario: Operario = await Operario.findOrFail(params.id);
-        const body = request.body();
-        theOperario.experiencia = body.experiencia;
-        return await theOperario.save();
-    }
+    operario.experiencia = experiencia
+    await operario.save()
 
-    public async delete({ params, response }: HttpContextContract) {
-        const theOperario: Operario = await Operario.findOrFail(params.id);
-            response.status(204);
-            return await theOperario.delete();
-    }
+    return operario
+  }
+
+  // Eliminar un operario
+  public async delete({ params, response }: HttpContextContract) {
+    const operario = await Operario.findOrFail(params.id)
+    await operario.delete()
+    return response.status(204)
+  }
 }
