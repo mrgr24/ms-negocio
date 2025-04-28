@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany } from '@ioc:Adonis/Lucid/Orm' 
+import { column, manyToMany, ManyToMany} from '@ioc:Adonis/Lucid/Orm' 
 import Especialidad from 'App/Models/Especialidad'
 import Maquina from 'App/Models/Maquina'
 import Seguro from './Seguro'
