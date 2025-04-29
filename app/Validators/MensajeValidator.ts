@@ -11,27 +11,14 @@ export default class MensajeValidator {
     chatId: schema.number([
       rules.exists({ table: 'chats', column: 'id' }),
     ]),
-    usuarioId: schema.number([
-      rules.exists({ table: 'usuarios', column: 'id' }),
-    ]),
+    user_id: schema.string({}, []),
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   */
   public messages: CustomMessages = {
     'contenido.required': 'El contenido del mensaje es obligatorio.',
     'contenido.maxLength': 'El contenido no puede exceder los 1000 caracteres.',
     'chatId.required': 'El ID del chat es obligatorio.',
     'chatId.exists': 'El chat especificado no existe.',
-    'usuarioId.required': 'El ID del usuario es obligatorio.',
-    'usuarioId.exists': 'El usuario especificado no existe.',
+    'user_id.required': 'El ID del usuario es obligatorio.',
   }
 }

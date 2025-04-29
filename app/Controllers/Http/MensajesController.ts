@@ -32,7 +32,6 @@ export default class MensajesController {
         theMensaje.fecha = body.fecha;
         theMensaje.hora = body.hora;
         theMensaje.chat_id = body.chat_id;
-        theMensaje.usuario_id = body.usuario_id;
         return await theMensaje.save();
     }
 

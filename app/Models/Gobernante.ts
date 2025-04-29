@@ -1,9 +1,7 @@
 import { DateTime } from 'luxon'
-import {column} from '@ioc:Adonis/Lucid/Orm'
-import Usuario from './Usuario'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
-
-export default class Gobernante extends Usuario {
+export default class Gobernante extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -21,5 +19,4 @@ export default class Gobernante extends Usuario {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
 }

@@ -1,11 +1,10 @@
 import { DateTime } from 'luxon'
-import { column, manyToMany, ManyToMany} from '@ioc:Adonis/Lucid/Orm' 
+import { BaseModel, column, manyToMany, ManyToMany} from '@ioc:Adonis/Lucid/Orm' 
 import Especialidad from 'App/Models/Especialidad'
 import Maquina from 'App/Models/Maquina'
 import Seguro from './Seguro'
-import Usuario from './Usuario'
 
-export default class Operario extends Usuario {
+export default class Operario extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -41,5 +40,4 @@ export default class Operario extends Usuario {
     pivotRelatedForeignKey: 'seguro_id',
   })
   public seguros: ManyToMany<typeof Seguro>
-
 }
