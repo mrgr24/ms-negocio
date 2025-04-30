@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Servicio from 'App/Models/Servicio';
+import ServicioValidator from 'App/Validators/ServicioValidator';
 
 export default class ServiciosController {
     public async find({ request, params }: HttpContextContract) {
@@ -15,33 +16,32 @@ export default class ServiciosController {
             } else {
                 return await Servicio.query()
             }
-
         }
-
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theServicio: Servicio = await Servicio.create(body);
+        const payload = await request.validate(ServicioValidator);
+        const theServicio: Servicio = await Servicio.create(payload);
         return theServicio;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theServicio: Servicio = await Servicio.findOrFail(params.id);
-        const body = request.body();
-        theServicio.costo = body.costo;
-        theServicio.f_inicio = body.f_inicio;
-        theServicio.f_fin = body.f_fin;
-        theServicio.prioridad = body.prioridad;
-        theServicio.tipo = body.tipo;
-        theServicio.estado = body.estado;
-        theServicio.ubicacion = body.ubicacion;
-        theServicio.resumen = body.resumen;
+        const payload = await request.validate(ServicioValidator);
+        theServicio.costo = payload.costo;
+        theServicio.f_inicio = payload.f_inicio;
+        theServicio.f_fin = payload.f_fin;
+        theServicio.prioridad = payload.prioridad;
+        theServicio.tipo = payload.tipo;
+        theServicio.estado = payload.estado;
+        theServicio.ubicacion = payload.ubicacion;
+        theServicio.resumen = payload.resumen;
         return await theServicio.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
         const theServicio: Servicio = await Servicio.findOrFail(params.id);
-            response.status(204);
-            return await theServicio.delete();
+        response.status(204);
+        return await theServicio.delete();
     }
 }

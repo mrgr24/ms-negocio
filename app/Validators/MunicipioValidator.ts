@@ -6,26 +6,17 @@ export default class MunicipioValidator {
 
   public schema = schema.create({
     nombre: schema.string({ trim: true }, [
-      rules.maxLength(255),
+      rules.maxLength(255)
     ]),
-    idGobernante: schema.number.optional([
-      rules.exists({ table: 'gobernantes', column: 'id' }),
-    ]),
+    idDepartamento: schema.number([
+      rules.exists({ table: 'departamentos', column: 'id' })
+    ])
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   */
   public messages: CustomMessages = {
-    'nombre.required': 'El nombre del departamento es obligatorio.',
+    'nombre.required': 'El nombre del municipio es obligatorio.',
     'nombre.maxLength': 'El nombre no puede exceder los 255 caracteres.',
-    'idGobernante.exists': 'El gobernante especificado no existe.',
+    'idDepartamento.required': 'El ID del departamento es obligatorio.',
+    'idDepartamento.exists': 'El departamento especificado no existe.'
   }
 }

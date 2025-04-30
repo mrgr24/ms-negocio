@@ -11,6 +11,9 @@ export default class EspecialidadMaquinaria extends BaseModel {
   @column()
   public maquina_id: number
 
+  @column()
+  public tipo_trabajo: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

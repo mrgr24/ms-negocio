@@ -11,6 +11,10 @@ export default class EspecialidadMaquinariaValidator {
     maquina_id: schema.number([
       rules.exists({ table: 'maquinas', column: 'id' }),
     ]),
+    tipo_trabajo: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ])
   })
 
   public messages: CustomMessages = {
@@ -18,5 +22,7 @@ export default class EspecialidadMaquinariaValidator {
     'especialidad_id.exists': 'La especialidad especificada no existe.',
     'maquina_id.required': 'El ID de la máquina es obligatorio.',
     'maquina_id.exists': 'La máquina especificada no existe.',
+    'tipo_trabajo.required': 'El tipo de trabajo es obligatorio',
+    'tipo_trabajo.maxLength': 'El tipo de trabajo no puede exceder los 255 caracteres'
   }
 }

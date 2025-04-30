@@ -5,32 +5,54 @@ export default class ServicioValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    nombre: schema.string({ trim: true }, [
-      rules.maxLength(255),
+    costo: schema.number([
+      rules.required()
     ]),
-    descripcion: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
+    f_inicio: schema.date({}, [
+      rules.required()
     ]),
-    precio: schema.number([
-      rules.range(1, 1000000),
+    f_fin: schema.date({}, [
+      rules.required(),
+      rules.afterField('f_inicio')
     ]),
+    prioridad: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ]),
+    tipo: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ]),
+    estado: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ]),
+    ubicacion: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ]),
+    resumen: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ])
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   */
   public messages: CustomMessages = {
-    'nombre.required': 'El nombre del servicio es obligatorio.',
-    'nombre.maxLength': 'El nombre del servicio no puede exceder los 255 caracteres.',
-    'descripcion.maxLength': 'La descripción no puede exceder los 500 caracteres.',
-    'precio.required': 'El precio del servicio es obligatorio.',
-    'precio.range': 'El precio debe estar entre 1 y 1,000,000.',
+    'costo.required': 'El costo es obligatorio',
+    'f_inicio.required': 'La fecha de inicio es obligatoria',
+    'f_inicio.date': 'La fecha de inicio debe ser una fecha válida',
+    'f_fin.required': 'La fecha de fin es obligatoria',
+    'f_fin.date': 'La fecha de fin debe ser una fecha válida',
+    'f_fin.afterField': 'La fecha de fin debe ser posterior a la fecha de inicio',
+    'prioridad.required': 'La prioridad es obligatoria',
+    'prioridad.maxLength': 'La prioridad no puede exceder los 255 caracteres',
+    'tipo.required': 'El tipo es obligatorio',
+    'tipo.maxLength': 'El tipo no puede exceder los 255 caracteres',
+    'estado.required': 'El estado es obligatorio',
+    'estado.maxLength': 'El estado no puede exceder los 255 caracteres',
+    'ubicacion.required': 'La ubicación es obligatoria',
+    'ubicacion.maxLength': 'La ubicación no puede exceder los 255 caracteres',
+    'resumen.required': 'El resumen es obligatorio',
+    'resumen.maxLength': 'El resumen no puede exceder los 255 caracteres'
   }
 }

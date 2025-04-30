@@ -14,6 +14,9 @@ export default class Mantenimiento extends BaseModel {
   public estado: string
 
   @column()
+  public responsable: string
+
+  @column()
   public maquina_id: number
 
   @column.dateTime({ autoCreate: true })

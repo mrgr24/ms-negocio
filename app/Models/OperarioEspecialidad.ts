@@ -14,6 +14,9 @@ export default class OperarioEspecialidad extends BaseModel {
   @column()
   public especialidad_id: number
 
+  @column()
+  public nivel_experiencia: string
+
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 }

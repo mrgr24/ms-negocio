@@ -32,6 +32,7 @@ export default class MantenimientosController {
         const payload = await request.validate(MantenimientoValidator);
         theMantenimiento.fecha = payload.fecha;
         theMantenimiento.estado = payload.estado;
+        theMantenimiento.responsable = payload.responsable;
         theMantenimiento.maquina_id = payload.maquina_id;
         return await theMantenimiento.save();
     }

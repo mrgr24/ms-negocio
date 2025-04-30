@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Procedimiento from 'App/Models/Procedimiento';
+import ProcedimientoValidator from 'App/Validators/ProcedimientoValidator';
 
 export default class ProcedimientosController {
     public async find({ request, params }: HttpContextContract) {
@@ -15,27 +16,29 @@ export default class ProcedimientosController {
             } else {
                 return await Procedimiento.query()
             }
-
         }
-
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theProcedimiento: Procedimiento = await Procedimiento.create(body);
+        const payload = await request.validate(ProcedimientoValidator);
+        const theProcedimiento: Procedimiento = await Procedimiento.create({
+            nombre: payload.nombre,
+            descripcion: payload.descripcion
+        });
         return theProcedimiento;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theProcedimiento: Procedimiento = await Procedimiento.findOrFail(params.id);
-        const body = request.body();
-        theProcedimiento.nombre = body.nombre;
-        theProcedimiento.descripcion = body.descripcion;
+        const payload = await request.validate(ProcedimientoValidator);
+        theProcedimiento.nombre = payload.nombre;
+        theProcedimiento.descripcion = payload.descripcion;
         return await theProcedimiento.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
         const theProcedimiento: Procedimiento = await Procedimiento.findOrFail(params.id);
-            response.status(204);
-            return await theProcedimiento.delete();
+        response.status(204);
+        return await theProcedimiento.delete();
     }
 }

@@ -11,6 +11,10 @@ export default class OperarioEspecialidadValidator {
     especialidad_id: schema.number([
       rules.exists({ table: 'especialidades', column: 'id' }),
     ]),
+    nivel_experiencia: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ])
   })
 
   public messages: CustomMessages = {

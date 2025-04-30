@@ -5,19 +5,20 @@ export default class OperarioValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    nombre: schema.string({ trim: true }, [
-      rules.maxLength(255),
+    user_id: schema.string({ trim: true }, [
+      rules.required(),
+      rules.unique({ table: 'operarios', column: 'user_id' })
     ]),
-    telefono: schema.string.optional({ trim: true }, [
-      rules.mobile(),
-      rules.maxLength(15),
-    ]),
+    experiencia: schema.string({ trim: true }, [
+      rules.required(),
+      rules.maxLength(255)
+    ])
   })
 
   public messages: CustomMessages = {
-    'nombre.required': 'El nombre del operario es obligatorio.',
-    'nombre.maxLength': 'El nombre no puede exceder los 255 caracteres.',
-    'telefono.mobile': 'El teléfono debe ser un número válido.',
-    'telefono.maxLength': 'El teléfono no puede exceder los 15 caracteres.',
+    'user_id.required': 'El ID del usuario es obligatorio.',
+    'user_id.unique': 'Este usuario ya está registrado como operario.',
+    'experiencia.required': 'La experiencia del operario es obligatoria.',
+    'experiencia.maxLength': 'La experiencia no puede exceder los 255 caracteres.'
   }
 }

@@ -4,6 +4,20 @@ import Operario from 'App/Models/Operario'
 import Maquina from 'App/Models/Maquina'
 import Seguro from 'App/Models/Seguro'
 
+export enum TipoPolizaOperario {
+  ARL = 'ARL',
+  SEGURO_VIDA = 'SEGURO_VIDA',
+  SEGURO_ACCIDENTES = 'SEGURO_ACCIDENTES',
+}
+
+export enum TipoPolizaMaquinaria {
+  TODO_RIESGO = 'TODO_RIESGO',
+  RESPONSABILIDAD_CIVIL = 'RESPONSABILIDAD_CIVIL',
+  DANOS_TERCEROS = 'DANOS_TERCEROS',
+}
+
+export type TipoPoliza = TipoPolizaOperario | TipoPolizaMaquinaria
+
 export default class Poliza extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -16,6 +30,9 @@ export default class Poliza extends BaseModel {
 
   @column()
   public seguro_id: number
+
+  @column()
+  public tipo_poliza: TipoPoliza
 
   @column()
   public fechaInicio: DateTime

@@ -6,16 +6,17 @@ export default class ProcedimientoValidator {
 
   public schema = schema.create({
     nombre: schema.string({ trim: true }, [
-      rules.maxLength(255),
+      rules.maxLength(255)
     ]),
-    descripcion: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
-    ]),
+    descripcion: schema.string({ trim: true }, [
+      rules.maxLength(500)
+    ])
   })
 
   public messages: CustomMessages = {
     'nombre.required': 'El nombre del procedimiento es obligatorio.',
     'nombre.maxLength': 'El nombre no puede exceder los 255 caracteres.',
-    'descripcion.maxLength': 'La descripción no puede exceder los 500 caracteres.',
+    'descripcion.required': 'La descripción del procedimiento es obligatoria.',
+    'descripcion.maxLength': 'La descripción no puede exceder los 500 caracteres.'
   }
 }

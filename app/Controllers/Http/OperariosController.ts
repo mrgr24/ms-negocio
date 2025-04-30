@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Operario from 'App/Models/Operario'
+import OperarioValidator from 'App/Validators/OperarioValidator'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
 
@@ -12,14 +13,15 @@ interface User {
 export default class OperariosController {
   // Crear un operario
   public async create({ request, response }: HttpContextContract) {
-    const { user_id, experiencia } = request.only(['user_id', 'experiencia'])
+    const payload = await request.validate(OperarioValidator)
+    const { user_id, experiencia } = payload
 
     // Verificar si el usuario existe en ms-security
     let user: User
     try {
       const userResponse = await axios.get<User>(`${Env.get('MS_SECURITY')}/api/users/${user_id}`, {
         headers: {
-          Authorization: request.header('Authorization'), // Pasar el token si es necesario
+          Authorization: request.header('Authorization'),
         },
       })
       user = userResponse.data
@@ -29,7 +31,7 @@ export default class OperariosController {
 
     // Crear el operario en ms-negocio
     const operario = await Operario.create({
-      user_id: user._id, // Asociar el operario al usuario existente
+      user_id: user._id,
       experiencia,
     })
 
@@ -101,9 +103,9 @@ export default class OperariosController {
   // Actualizar un operario
   public async update({ params, request }: HttpContextContract) {
     const operario = await Operario.findOrFail(params.id)
-    const { experiencia } = request.only(['experiencia'])
-
-    operario.experiencia = experiencia
+    const payload = await request.validate(OperarioValidator)
+    
+    operario.experiencia = payload.experiencia
     await operario.save()
 
     return operario

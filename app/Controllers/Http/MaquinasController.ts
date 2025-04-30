@@ -39,6 +39,8 @@ export default class MaquinasController {
         theMaquina.estado = payload.estado;
         theMaquina.ubicacion = payload.ubicacion;
         theMaquina.disponibilidad = payload.disponibilidad ?? theMaquina.disponibilidad;
+        theMaquina.fecha_asignacion = payload.fecha_asignacion ?? theMaquina.fecha_asignacion;
+        theMaquina.fecha_retiro = payload.fecha_retiro ?? theMaquina.fecha_retiro;
         return await theMaquina.save();
     }
 

@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ProcedimientoMantenimiento from 'App/Models/ProcedimientoMantenimiento';
+import ProcedimientoMantenimientoValidator from 'App/Validators/ProcedimientoMantenimientoValidator';
 
 export default class ProcedimientoMantenimientosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,17 +20,23 @@ export default class ProcedimientoMantenimientosController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theProcedimientoMantenimiento: ProcedimientoMantenimiento = await ProcedimientoMantenimiento.create(body);
+        const payload = await request.validate(ProcedimientoMantenimientoValidator);
+        const theProcedimientoMantenimiento: ProcedimientoMantenimiento = await ProcedimientoMantenimiento.create({
+            procedimiento_id: payload.procedimiento_id,
+            mantenimiento_id: payload.mantenimiento_id,
+            estado: payload.estado
+        });
         return theProcedimientoMantenimiento;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theProcedimientoMantenimiento: ProcedimientoMantenimiento = await ProcedimientoMantenimiento.findOrFail(params.id);
-        const body = request.body();
-        theProcedimientoMantenimiento.procedimiento_id = body.procedimiento_id;
-        theProcedimientoMantenimiento.mantenimiento_id = body.mantenimiento_id;
+        const payload = await request.validate(ProcedimientoMantenimientoValidator);
+        theProcedimientoMantenimiento.procedimiento_id = payload.procedimiento_id;
+        theProcedimientoMantenimiento.mantenimiento_id = payload.mantenimiento_id;
+        theProcedimientoMantenimiento.estado = payload.estado;
         return await theProcedimientoMantenimiento.save();
     }
 

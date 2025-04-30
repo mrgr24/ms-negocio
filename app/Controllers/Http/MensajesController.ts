@@ -20,12 +20,13 @@ export default class MensajesController {
     }
 
     public async create({ request }: HttpContextContract) {
-        const now = new Date();
-        await request.validate(MensajeValidator);
+        const payload = await request.validate(MensajeValidator);
         const data = {
-            ...request.only(['contenido', 'chat_id', 'user_id']),
-            fecha: now,
-            hora: now.toLocaleTimeString()
+            contenido: payload.contenido,
+            chat_id: payload.chat_id,
+            user_id: payload.user_id,
+            fecha: payload.fecha.toJSDate(),
+            hora: payload.hora
         };
         const theMensaje: Mensaje = await Mensaje.create(data);
         return theMensaje;
@@ -33,12 +34,13 @@ export default class MensajesController {
 
     public async update({ params, request }: HttpContextContract) {
         const theMensaje: Mensaje = await Mensaje.findOrFail(params.id);
-        const now = new Date();
-        await request.validate(MensajeValidator);
+        const payload = await request.validate(MensajeValidator);
         const data = {
-            ...request.only(['contenido', 'chat_id', 'user_id']),
-            fecha: now,
-            hora: now.toLocaleTimeString()
+            contenido: payload.contenido,
+            chat_id: payload.chat_id,
+            user_id: payload.user_id,
+            fecha: payload.fecha.toJSDate(),
+            hora: payload.hora
         };
         theMensaje.merge(data);
         return await theMensaje.save();

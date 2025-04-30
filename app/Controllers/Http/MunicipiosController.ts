@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Municipio from 'App/Models/Municipio';
+import MunicipioValidator from 'App/Validators/MunicipioValidator';
 
 export default class MunicipiosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,18 +20,17 @@ export default class MunicipiosController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theMunicipio: Municipio = await Municipio.create(body);
+        const payload = await request.validate(MunicipioValidator);
+        const theMunicipio: Municipio = await Municipio.create(payload);
         return theMunicipio;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theMunicipio: Municipio = await Municipio.findOrFail(params.id);
-        const body = request.body();
-        theMunicipio.nombre = body.nombre;
-        theMunicipio.idDepartamento = body.idDepartamento;  // Foreign key to Departamento table 
-        // Foreign key to Departamento table
+        const payload = await request.validate(MunicipioValidator);
+        theMunicipio.merge(payload);
         return await theMunicipio.save();
     }
 

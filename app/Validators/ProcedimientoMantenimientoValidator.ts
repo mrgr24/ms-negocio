@@ -11,6 +11,9 @@ export default class ProcedimientoMantenimientoValidator {
     mantenimiento_id: schema.number([
       rules.exists({ table: 'mantenimientos', column: 'id' }),
     ]),
+    estado: schema.string({ trim: true }, [
+      rules.maxLength(255)
+    ])
   })
 
   public messages: CustomMessages = {
@@ -18,5 +21,7 @@ export default class ProcedimientoMantenimientoValidator {
     'procedimiento_id.exists': 'El procedimiento especificado no existe.',
     'mantenimiento_id.required': 'El ID del mantenimiento es obligatorio.',
     'mantenimiento_id.exists': 'El mantenimiento especificado no existe.',
+    'estado.required': 'El estado es obligatorio.',
+    'estado.maxLength': 'El estado no puede exceder los 255 caracteres.'
   }
 }

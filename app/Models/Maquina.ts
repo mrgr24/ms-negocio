@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, manyToMany, ManyToMany, HasMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import Operario from 'App/Models/Operario'
 import TipoServicio from './TipoServicio'
-import Poliza from './Poliza'
 import Combo from './Combo'
 import Gp from './Gp'
 import Mantenimiento from './Mantenimiento'
@@ -29,6 +28,12 @@ export default class Maquina extends BaseModel {
 
   @column()
   public disponibilidad: boolean
+
+  @column.date()
+  public fecha_asignacion: DateTime
+
+  @column.date()
+  public fecha_retiro: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

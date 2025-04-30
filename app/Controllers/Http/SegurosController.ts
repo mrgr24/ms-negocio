@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Seguro from 'App/Models/Seguro';
+import SeguroValidator from 'App/Validators/SeguroValidator';
 
 export default class SegurosController {
     public async find({ request, params }: HttpContextContract) {
@@ -15,27 +16,26 @@ export default class SegurosController {
             } else {
                 return await Seguro.query()
             }
-
         }
-
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theSeguro: Seguro = await Seguro.create(body);
+        const payload = await request.validate(SeguroValidator);
+        const theSeguro: Seguro = await Seguro.create(payload);
         return theSeguro;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theSeguro: Seguro = await Seguro.findOrFail(params.id);
-        const body = request.body();
-        theSeguro.nombre = body.nombre;
-        theSeguro.descripcion = body.descripcion;
+        const payload = await request.validate(SeguroValidator);
+        theSeguro.nombre = payload.nombre;
+        theSeguro.descripcion = payload.descripcion;
         return await theSeguro.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
         const theSeguro: Seguro = await Seguro.findOrFail(params.id);
-            response.status(204);
-            return await theSeguro.delete();
+        response.status(204);
+        return await theSeguro.delete();
     }
 }

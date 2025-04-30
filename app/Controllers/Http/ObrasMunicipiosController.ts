@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ObraMunicipio from 'App/Models/ObraMunicipio';
+import ObraMunicipioValidator from 'App/Validators/ObraMunicipioValidator';
 
 export default class ObrasMunicipiosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,17 +20,21 @@ export default class ObrasMunicipiosController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theObraMunicipio: ObraMunicipio = await ObraMunicipio.create(body);
+        const payload = await request.validate(ObraMunicipioValidator);
+        const theObraMunicipio: ObraMunicipio = await ObraMunicipio.create({
+            obra_id: payload.obra_id,
+            municipio_id: payload.municipio_id
+        });
         return theObraMunicipio;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theObraMunicipio: ObraMunicipio = await ObraMunicipio.findOrFail(params.id);
-        const body = request.body();
-        theObraMunicipio.obra_id = body.obraId;
-        theObraMunicipio.municipio_id = body.municipioId;
+        const payload = await request.validate(ObraMunicipioValidator);
+        theObraMunicipio.obra_id = payload.obra_id;
+        theObraMunicipio.municipio_id = payload.municipio_id;
         return await theObraMunicipio.save();
     }
 

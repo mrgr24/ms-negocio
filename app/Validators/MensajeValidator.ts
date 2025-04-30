@@ -11,9 +11,11 @@ export default class MensajeValidator {
     chat_id: schema.number([
       rules.exists({ table: 'chats', column: 'id' })
     ]),
-    user_id: schema.string({}, []),
-    fecha: schema.date.optional(),
-    hora: schema.string.optional()
+    user_id: schema.string(),
+    fecha: schema.date(),
+    hora: schema.string([], [
+      rules.regex(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+    ])
   })
 
   public messages: CustomMessages = {
@@ -22,7 +24,9 @@ export default class MensajeValidator {
     'chat_id.required': 'El ID del chat es obligatorio.',
     'chat_id.exists': 'El chat especificado no existe.',
     'user_id.required': 'El ID del usuario es obligatorio.',
+    'fecha.required': 'La fecha es obligatoria.',
     'fecha.date': 'La fecha debe ser una fecha válida.',
-    'hora.string': 'La hora debe ser una cadena de texto válida.'
+    'hora.required': 'La hora es obligatoria.',
+    'hora.regex': 'La hora debe tener un formato válido (HH:MM:SS).'
   }
 }

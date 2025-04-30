@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.date('fecha').notNullable()
       table.string('estado').notNullable()
+      table.string('responsable').notNullable()
       table.integer('maquina_id').unsigned().references('id').inTable('maquinas').onDelete('CASCADE').notNullable()
 
       /**

@@ -12,11 +12,9 @@ export default class extends BaseSchema {
       table.string('Estado').notNullable()
       table.string('Ubicacion').notNullable()
       table.boolean('Disponibilidad').notNullable().defaultTo(true)
-      
+      table.date('fecha_asignacion').nullable()
+      table.date('fecha_retiro').nullable()
 
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
