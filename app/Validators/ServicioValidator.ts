@@ -6,7 +6,9 @@ export default class ServicioValidator {
 
   public schema = schema.create({
     costo: schema.number([
-      rules.required()
+      rules.required(),
+      rules.unsigned(),
+      rules.range(1, Number.MAX_SAFE_INTEGER)
     ]),
     f_inicio: schema.date({}, [
       rules.required()
@@ -39,6 +41,8 @@ export default class ServicioValidator {
 
   public messages: CustomMessages = {
     'costo.required': 'El costo es obligatorio',
+    'costo.unsigned': 'El costo debe ser un valor positivo',
+    'costo.range': 'El costo debe ser mayor a 0',
     'f_inicio.required': 'La fecha de inicio es obligatoria',
     'f_inicio.date': 'La fecha de inicio debe ser una fecha válida',
     'f_fin.required': 'La fecha de fin es obligatoria',

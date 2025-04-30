@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import TipoServicio from 'App/Models/TipoServicio';
+import TipoServicioValidator from 'App/Validators/TipoServicioValidator';
 
 export default class TipoServiciosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,17 +20,23 @@ export default class TipoServiciosController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theTipoServicio: TipoServicio = await TipoServicio.create(body);
+        const payload = await request.validate(TipoServicioValidator);
+        const theTipoServicio: TipoServicio = await TipoServicio.create({
+            nombre: payload.nombre,
+            descripcion: payload.descripcion || ''
+        });
         return theTipoServicio;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theTipoServicio: TipoServicio = await TipoServicio.findOrFail(params.id);
-        const body = request.body();
-        theTipoServicio.nombre = body.nombre;
-        theTipoServicio.descripcion = body.descripcion;
+        const payload = await request.validate(TipoServicioValidator);
+        theTipoServicio.nombre = payload.nombre;
+        if (payload.descripcion !== undefined) {
+            theTipoServicio.descripcion = payload.descripcion;
+        }
         return await theTipoServicio.save();
     }
 
