@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Maquina from 'App/Models/Maquina';
+import MaquinaValidator from 'App/Validators/MaquinaValidator';
 
 export default class MaquinasController {
     public async find({ request, params }: HttpContextContract) {
@@ -22,21 +23,22 @@ export default class MaquinasController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theMaquina: Maquina = await Maquina.create(body);
+        const payload = await request.validate(MaquinaValidator);
+        const theMaquina: Maquina = await Maquina.create(payload);
         return theMaquina;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theMaquina: Maquina = await Maquina.findOrFail(params.id);
-        const body = request.body();
-        theMaquina.especialidad = body.especialidad;
-        theMaquina.marca = body.marca;
-        theMaquina.modelo = body.modelo;
-        theMaquina.estado = body.estado;
-        theMaquina.ubicacion = body.ubicacion;
-        theMaquina.disponibilidad = body.disponibilidad;
+        const payload = await request.validate(MaquinaValidator);
+        theMaquina.especialidad = payload.especialidad;
+        theMaquina.marca = payload.marca;
+        theMaquina.modelo = payload.modelo;
+        theMaquina.estado = payload.estado;
+        theMaquina.ubicacion = payload.ubicacion;
+        theMaquina.disponibilidad = payload.disponibilidad ?? theMaquina.disponibilidad;
         return await theMaquina.save();
     }
 

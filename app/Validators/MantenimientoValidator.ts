@@ -6,18 +6,21 @@ export default class MantenimientoValidator {
 
   public schema = schema.create({
     fecha: schema.date(),
-    descripcion: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
+    estado: schema.string({ trim: true }, [
+      rules.maxLength(255)
     ]),
-    maquinaria_id: schema.number([
-      rules.exists({ table: 'maquinarias', column: 'id' }),
-    ]),
+    maquina_id: schema.number([
+      rules.exists({ table: 'maquinas', column: 'id' })
+    ])
   })
 
   public messages: CustomMessages = {
     'fecha.required': 'La fecha del mantenimiento es obligatoria.',
-    'descripcion.maxLength': 'La descripción no puede exceder los 500 caracteres.',
-    'maquinaria_id.required': 'El ID de la maquinaria es obligatorio.',
-    'maquinaria_id.exists': 'La maquinaria especificada no existe.',
+    'fecha.date': 'La fecha debe ser una fecha válida.',
+    'estado.required': 'El estado del mantenimiento es obligatorio.',
+    'estado.maxLength': 'El estado no puede exceder los 255 caracteres.',
+    'maquina_id.required': 'El ID de la máquina es obligatorio.',
+    'maquina_id.exists': 'La máquina especificada no existe.',
+    'maquina_id.number': 'El ID de la máquina debe ser un número.'
   }
 }

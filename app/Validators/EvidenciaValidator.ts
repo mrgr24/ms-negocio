@@ -1,36 +1,31 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class TurnoValidator {
+export default class EvidenciaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    operarioId: schema.number([
-      rules.exists({ table: 'operarios', column: 'id' }),
+    tipo_de_archivo: schema.string({ trim: true }, [
+      rules.maxLength(255)
     ]),
-    maquinaId: schema.number([
-      rules.exists({ table: 'maquinas', column: 'id' }),
+    contenido_archivo: schema.string({ trim: true }, [
+      rules.maxLength(1000)
     ]),
-    fecha: schema.date(),
-    hora: schema.string({ trim: true }),
+    fecha_de_carga: schema.date(),
+    idServicio: schema.number([
+      rules.exists({ table: 'servicios', column: 'id' })
+    ])
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   */
   public messages: CustomMessages = {
-    'operarioId.required': 'El ID del operario es obligatorio.',
-    'operarioId.exists': 'El operario especificado no existe.',
-    'maquinaId.required': 'El ID de la máquina es obligatorio.',
-    'maquinaId.exists': 'La máquina especificada no existe.',
-    'fecha.required': 'La fecha es obligatoria.',
-    'hora.required': 'La hora es obligatoria.',
+    'tipo_de_archivo.required': 'El tipo de archivo es obligatorio.',
+    'tipo_de_archivo.maxLength': 'El tipo de archivo no puede exceder los 255 caracteres.',
+    'contenido_archivo.required': 'El contenido del archivo es obligatorio.',
+    'contenido_archivo.maxLength': 'El contenido del archivo no puede exceder los 1000 caracteres.',
+    'fecha_de_carga.required': 'La fecha de carga es obligatoria.',
+    'fecha_de_carga.date': 'La fecha de carga debe ser una fecha válida.',
+    'idServicio.required': 'El ID del servicio es obligatorio.',
+    'idServicio.exists': 'El servicio especificado no existe.',
+    'idServicio.number': 'El ID del servicio debe ser un número.'
   }
 }

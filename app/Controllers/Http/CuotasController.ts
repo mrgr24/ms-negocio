@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Cuota from 'App/Models/Cuota';
+import CuotaValidator from 'App/Validators/CuotaValidator';
 
 export default class CuotasController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,16 +20,17 @@ export default class CuotasController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theCuota: Cuota = await Cuota.create(body);
+        const payload = await request.validate(CuotaValidator);
+        const theCuota: Cuota = await Cuota.create(payload);
         return theCuota;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theCuota: Cuota = await Cuota.findOrFail(params.id);
-        const body = request.body();
-        theCuota.idServicio = body.idServicio;
+        const payload = await request.validate(CuotaValidator);
+        theCuota.idServicio = payload.idServicio;
         return await theCuota.save();
     }
 

@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import GobernanteDepartamento from 'App/Models/GobernanteDepartamento';
+import GobernanteDepartamentoValidator from 'App/Validators/GobernanteDepartamentoValidator';
 
 export default class GobernantesDepartamentosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,20 +20,27 @@ export default class GobernantesDepartamentosController {
         }
 
     }
-    public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theGobernanteDepartamento: GobernanteDepartamento = await GobernanteDepartamento.create(body);
-        return theGobernanteDepartamento;
+
+    public async create(ctx: HttpContextContract) {
+        const validator = new GobernanteDepartamentoValidator(ctx);
+        const payload = await ctx.request.validate(GobernanteDepartamentoValidator);
+        if (await validator.validate(payload)) {
+            const theGobernanteDepartamento: GobernanteDepartamento = await GobernanteDepartamento.create(payload);
+            return theGobernanteDepartamento;
+        }
     }
 
-    public async update({ params, request }: HttpContextContract) {
-        const theGobernanteDepartamento: GobernanteDepartamento = await GobernanteDepartamento.findOrFail(params.id);
-        const body = request.body();
-        theGobernanteDepartamento.gobernante_id = body.gobernante_id; // Foreign key to Gobernante table
-        theGobernanteDepartamento.departamento_id = body.departamento_id; // Foreign key to Departamento table
-        theGobernanteDepartamento.fecha_inicio = body.fecha_inicio; // Date when the governor started
-        theGobernanteDepartamento.fecha_fin = body.fecha_fin; // Date when the governor ended
-        return await theGobernanteDepartamento.save();
+    public async update(ctx: HttpContextContract) {
+        const theGobernanteDepartamento: GobernanteDepartamento = await GobernanteDepartamento.findOrFail(ctx.params.id);
+        const validator = new GobernanteDepartamentoValidator(ctx);
+        const payload = await ctx.request.validate(GobernanteDepartamentoValidator);
+        if (await validator.validate(payload)) {
+            theGobernanteDepartamento.gobernante_id = payload.gobernante_id;
+            theGobernanteDepartamento.departamento_id = payload.departamento_id;
+            theGobernanteDepartamento.fecha_inicio = payload.fecha_inicio;
+            theGobernanteDepartamento.fecha_fin = payload.fecha_fin;
+            return await theGobernanteDepartamento.save();
+        }
     }
 
     public async delete({ params, response }: HttpContextContract) {

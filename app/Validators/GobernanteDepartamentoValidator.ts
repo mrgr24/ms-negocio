@@ -5,43 +5,42 @@ export default class GobernanteDepartamentoValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    id_gobernante: schema.number([
-      rules.exists({ table: 'gobernantes', column: 'id' }),
-      rules.unique({
-        table: 'gobernante_departamentos',
-        column: 'id_gobernante',
-        whereNot: { id: this.ctx.params.id },
-      }),
+    gobernante_id: schema.number([
+      rules.exists({ table: 'gobernantes', column: 'id' })
     ]),
-    id_departamento: schema.number([
-      rules.exists({ table: 'departamentos', column: 'id' }),
-      rules.unique({
-        table: 'gobernante_departamentos',
-        column: 'id_departamento',
-        whereNot: { id: this.ctx.params.id },
-      }),
+    departamento_id: schema.number([
+      rules.exists({ table: 'departamentos', column: 'id' })
     ]),
     fecha_inicio: schema.date(),
     fecha_fin: schema.date({}, [
-      rules.afterField('fecha_inicio'),
-    ]),
-    periodo: schema.string.optional([
-      rules.maxLength(100),
-    ]),
-    funciones: schema.string.optional([
-      rules.maxLength(500),
-    ]),
+      rules.afterOrEqual('today')
+    ])
   })
 
+  public async validate(data: any) {
+    if (data.fecha_inicio && data.fecha_fin) {
+      if (new Date(data.fecha_inicio) >= new Date(data.fecha_fin)) {
+        this.ctx.response.status(422).send({
+          errors: [{
+            field: 'fecha_fin',
+            message: 'La fecha de fin debe ser posterior a la fecha de inicio'
+          }]
+        })
+        return false
+      }
+    }
+    return true
+  }
+
   public messages: CustomMessages = {
-    'id_gobernante.exists': 'El gobernante no existe',
-    'id_gobernante.unique': 'Este gobernante ya está asignado a un departamento',
-    'id_departamento.exists': 'El departamento no existe',
-    'id_departamento.unique': 'Este departamento ya tiene un gobernante asignado',
-    'fecha_inicio.required': 'La fecha de inicio es obligatoria',
-    'fecha_fin.required': 'La fecha de fin es obligatoria',
-    'fecha_fin.afterField': 'La fecha de fin debe ser posterior a la fecha de inicio',
-    'periodo.maxLength': 'El periodo no puede exceder los 100 caracteres',
-    'funciones.maxLength': 'Las funciones no pueden exceder los 500 caracteres',
+    'gobernante_id.required': 'El ID del gobernante es obligatorio.',
+    'gobernante_id.exists': 'El gobernante especificado no existe.',
+    'departamento_id.required': 'El ID del departamento es obligatorio.',
+    'departamento_id.exists': 'El departamento especificado no existe.',
+    'fecha_inicio.required': 'La fecha de inicio es obligatoria.',
+    'fecha_inicio.date': 'La fecha de inicio debe ser una fecha válida.',
+    'fecha_fin.required': 'La fecha de fin es obligatoria.',
+    'fecha_fin.date': 'La fecha de fin debe ser una fecha válida.',
+    'fecha_fin.afterOrEqual': 'La fecha de fin no puede ser en el pasado.'
   }
 }

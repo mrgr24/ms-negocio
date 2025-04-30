@@ -5,17 +5,18 @@ export default class ChatValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    nombre: schema.string({ trim: true }, [
+    titulo: schema.string({ trim: true }, [
       rules.maxLength(255),
     ]),
-    descripcion: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
+    tipo: schema.string({ trim: true }, [
+      rules.maxLength(50),
     ]),
   })
 
   public messages: CustomMessages = {
-    'nombre.required': 'El nombre del chat es obligatorio.',
-    'nombre.maxLength': 'El nombre del chat no puede exceder los 255 caracteres.',
-    'descripcion.maxLength': 'La descripción no puede exceder los 500 caracteres.',
+    'titulo.required': 'El título del chat es obligatorio.',
+    'titulo.maxLength': 'El título del chat no puede exceder los 255 caracteres.',
+    'tipo.required': 'El tipo de chat es obligatorio.',
+    'tipo.maxLength': 'El tipo de chat no puede exceder los 50 caracteres.',
   }
 }

@@ -1,40 +1,42 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import MaquinasCombo from 'App/Models/MaquinaCombo';
+import MaquinaCombo from 'App/Models/MaquinaCombo';
+import MaquinaComboValidator from 'App/Validators/MaquinaComboValidator';
 
 export default class MaquinasCombosController {
     public async find({ request, params }: HttpContextContract) {
         if (params.id) {
-            let theMaquinasCombo: MaquinasCombo = await MaquinasCombo.findOrFail(params.id)
+            let theMaquinasCombo: MaquinaCombo = await MaquinaCombo.findOrFail(params.id)
             return theMaquinasCombo;
         } else {
             const data = request.all()
             if ("page" in data && "per_page" in data) {
                 const page = request.input('page', 1);
                 const perPage = request.input("per_page", 20);
-                return await MaquinasCombo.query().paginate(page, perPage)
+                return await MaquinaCombo.query().paginate(page, perPage)
             } else {
-                return await MaquinasCombo.query()
+                return await MaquinaCombo.query()
             }
 
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theMaquinasCombo: MaquinasCombo = await MaquinasCombo.create(body);
+        const payload = await request.validate(MaquinaComboValidator);
+        const theMaquinasCombo: MaquinaCombo = await MaquinaCombo.create(payload);
         return theMaquinasCombo;
     }
 
     public async update({ params, request }: HttpContextContract) {
-        const theMaquinasCombo: MaquinasCombo = await MaquinasCombo.findOrFail(params.id);
-        const body = request.body();
-        theMaquinasCombo.maquina_id = body.maquina_id;
-        theMaquinasCombo.combo_id = body.combo_id;
+        const theMaquinasCombo: MaquinaCombo = await MaquinaCombo.findOrFail(params.id);
+        const payload = await request.validate(MaquinaComboValidator);
+        theMaquinasCombo.maquina_id = payload.maquina_id;
+        theMaquinasCombo.combo_id = payload.combo_id;
         return await theMaquinasCombo.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
-        const theMaquinasCombo: MaquinasCombo = await MaquinasCombo.findOrFail(params.id);
+        const theMaquinasCombo: MaquinaCombo = await MaquinaCombo.findOrFail(params.id);
             response.status(204);
             return await theMaquinasCombo.delete();
     }

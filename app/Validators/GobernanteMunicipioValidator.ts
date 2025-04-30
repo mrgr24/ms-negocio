@@ -5,40 +5,32 @@ export default class GobernanteMunicipioValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    id_gobernante: schema.number([
-      rules.exists({ table: 'gobernantes', column: 'id' }),
-      // Un gobernante puede estar asociado a múltiples municipios
+    gobernante_id: schema.number([
+      rules.exists({ table: 'gobernantes', column: 'id' })
     ]),
-    id_municipio: schema.number([
+    municipio_id: schema.number([
       rules.exists({ table: 'municipios', column: 'id' }),
-      // Verificamos que esta combinación específica no exista ya
       rules.unique({
         table: 'gobernante_municipios',
-        column: 'id_municipio',
-        where: { 'id_gobernante': this.ctx.request.input('id_gobernante') },
+        column: 'municipio_id',
+        where: { 'gobernante_id': this.ctx.request.input('gobernante_id') },
         whereNot: { id: this.ctx.params.id },
       }),
     ]),
     fecha_inicio: schema.date(),
     fecha_fin: schema.date({}, [
-      rules.afterField('fecha_inicio'),
-    ]),
-    cargo: schema.string.optional([
-      rules.maxLength(100),
-    ]),
-    responsabilidades: schema.string.optional([
-      rules.maxLength(500),
-    ]),
+      rules.afterField('fecha_inicio')
+    ])
   })
 
   public messages: CustomMessages = {
-    'id_gobernante.exists': 'El gobernante no existe',
-    'id_municipio.exists': 'El municipio no existe',
-    'id_municipio.unique': 'Este municipio ya está asignado a este gobernante',
+    'gobernante_id.required': 'El ID del gobernante es obligatorio',
+    'gobernante_id.exists': 'El gobernante no existe',
+    'municipio_id.required': 'El ID del municipio es obligatorio',
+    'municipio_id.exists': 'El municipio no existe',
+    'municipio_id.unique': 'Este municipio ya está asignado a este gobernante',
     'fecha_inicio.required': 'La fecha de inicio es obligatoria',
     'fecha_fin.required': 'La fecha de fin es obligatoria',
-    'fecha_fin.afterField': 'La fecha de fin debe ser posterior a la fecha de inicio',
-    'cargo.maxLength': 'El cargo no puede exceder los 100 caracteres',
-    'responsabilidades.maxLength': 'Las responsabilidades no pueden exceder los 500 caracteres',
+    'fecha_fin.afterField': 'La fecha de fin debe ser posterior a la fecha de inicio'
   }
 }

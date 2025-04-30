@@ -7,7 +7,7 @@ export default class Chat extends BaseModel {
   public id: number
 
   @column()
-  public titulo: number
+  public titulo: string
 
   @column()
   public tipo: string

@@ -1,35 +1,28 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class GpsValidator {
+export default class GpValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    modelo: schema.string({ trim: true }, [
-      rules.maxLength(255),
+    latitud: schema.string({ trim: true }, [
+      rules.maxLength(255)
     ]),
-    numeroSerie: schema.string({ trim: true }, [
-      rules.maxLength(255),
+    longitud: schema.string({ trim: true }, [
+      rules.maxLength(255)
     ]),
-    estado: schema.enum(['activo', 'inactivo'] as const),
+    maquina_id: schema.number([
+      rules.exists({ table: 'maquinas', column: 'id' })
+    ])
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   */
   public messages: CustomMessages = {
-    'modelo.required': 'El modelo del GPS es obligatorio.',
-    'modelo.maxLength': 'El modelo no puede exceder los 255 caracteres.',
-    'numeroSerie.required': 'El número de serie es obligatorio.',
-    'numeroSerie.maxLength': 'El número de serie no puede exceder los 255 caracteres.',
-    'estado.required': 'El estado del GPS es obligatorio.',
-    'estado.enum': 'El estado debe ser "activo" o "inactivo".',
+    'latitud.required': 'La latitud es obligatoria.',
+    'latitud.maxLength': 'La latitud no puede exceder los 255 caracteres.',
+    'longitud.required': 'La longitud es obligatoria.',
+    'longitud.maxLength': 'La longitud no puede exceder los 255 caracteres.',
+    'maquina_id.required': 'El ID de la máquina es obligatorio.',
+    'maquina_id.exists': 'La máquina especificada no existe.',
+    'maquina_id.number': 'El ID de la máquina debe ser un número.'
   }
 }

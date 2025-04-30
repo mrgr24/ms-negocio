@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Factura from 'App/Models/Factura';
+import FacturaValidator from 'App/Validators/FacturaValidator';
 
 export default class FacturasController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,17 +20,18 @@ export default class FacturasController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theFactura: Factura = await Factura.create(body);
+        const payload = await request.validate(FacturaValidator);
+        const theFactura: Factura = await Factura.create(payload);
         return theFactura;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theFactura: Factura = await Factura.findOrFail(params.id);
-        const body = request.body();
-        theFactura.detalle = body.detalle;
-        theFactura.idCuota = body.idCuota;
+        const payload = await request.validate(FacturaValidator);
+        theFactura.detalle = payload.detalle;
+        theFactura.idCuota = payload.idCuota;
         return await theFactura.save();
     }
 

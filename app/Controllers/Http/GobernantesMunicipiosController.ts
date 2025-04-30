@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import GobernanteMunicipio from 'App/Models/GobernanteMunicipio';
+import GobernanteMunicipioValidator from 'App/Validators/GobernanteMunicipioValidator';
 
 export default class GobernantesMunicipiosController {
     public async find({ request, params }: HttpContextContract) {
@@ -19,20 +20,20 @@ export default class GobernantesMunicipiosController {
         }
 
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.create(body);
+        const payload = await request.validate(GobernanteMunicipioValidator);
+        const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.create(payload);
         return theGobernanteMunicipio;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.findOrFail(params.id);
-        const body = request.body();
-        theGobernanteMunicipio.gobernante_id = body.gobernante_id; // Foreign key to Gobernante table
-        theGobernanteMunicipio.municipio_id = body.municipio_id; // Foreign key to Municipio table
-        theGobernanteMunicipio.fecha_inicio = body.fecha_inicio; 
-        theGobernanteMunicipio.fecha_fin = body.fecha_fin; 
-        // Foreign key to Departamento table
+        const payload = await request.validate(GobernanteMunicipioValidator);
+        theGobernanteMunicipio.gobernante_id = payload.gobernante_id;
+        theGobernanteMunicipio.municipio_id = payload.municipio_id;
+        theGobernanteMunicipio.fecha_inicio = payload.fecha_inicio;
+        theGobernanteMunicipio.fecha_fin = payload.fecha_fin;
         return await theGobernanteMunicipio.save();
     }
 

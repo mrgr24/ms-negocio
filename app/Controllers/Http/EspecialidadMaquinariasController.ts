@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import EspecialidadMaquinaria from 'App/Models/EspecialidadMaquinaria';
+import EspecialidadMaquinaria from 'App/Models/EspecialidadMaquinaria'
+import EspecialidadMaquinariaValidator from 'App/Validators/EspecialidadMaquinariaValidator'
 
 export default class EspecialidadMaquinariasController {
     public async find({ request, params }: HttpContextContract) {
@@ -20,17 +21,17 @@ export default class EspecialidadMaquinariasController {
 
     }
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theEspecialidadMaquinaria: EspecialidadMaquinaria = await EspecialidadMaquinaria.create(body);
-        return theEspecialidadMaquinaria;
+        const payload = await request.validate(EspecialidadMaquinariaValidator)
+        const theEspecialidadMaquinaria = await EspecialidadMaquinaria.create(payload)
+        return theEspecialidadMaquinaria
     }
 
     public async update({ params, request }: HttpContextContract) {
-        const theEspecialidadMaquinaria: EspecialidadMaquinaria = await EspecialidadMaquinaria.findOrFail(params.id);
-        const body = request.body();
-        theEspecialidadMaquinaria.especialidad_id = body.especialidadId;
-        theEspecialidadMaquinaria.maquina_id = body.maquinaId;
-        return await theEspecialidadMaquinaria.save();
+        const theEspecialidadMaquinaria = await EspecialidadMaquinaria.findOrFail(params.id)
+        const payload = await request.validate(EspecialidadMaquinariaValidator)
+        theEspecialidadMaquinaria.especialidad_id = payload.especialidad_id
+        theEspecialidadMaquinaria.maquina_id = payload.maquina_id
+        return await theEspecialidadMaquinaria.save()
     }
 
     public async delete({ params, response }: HttpContextContract) {

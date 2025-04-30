@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Mensaje from 'App/Models/Mensaje';
+import MensajeValidator from 'App/Validators/MensajeValidator';
 
 export default class MensajesController {
     public async find({ request, params }: HttpContextContract) {
@@ -15,29 +16,37 @@ export default class MensajesController {
             } else {
                 return await Mensaje.query()
             }
-
         }
-
     }
+
     public async create({ request }: HttpContextContract) {
-        const body = request.body();
-        const theMensaje: Mensaje = await Mensaje.create(body);
+        const now = new Date();
+        await request.validate(MensajeValidator);
+        const data = {
+            ...request.only(['contenido', 'chat_id', 'user_id']),
+            fecha: now,
+            hora: now.toLocaleTimeString()
+        };
+        const theMensaje: Mensaje = await Mensaje.create(data);
         return theMensaje;
     }
 
     public async update({ params, request }: HttpContextContract) {
         const theMensaje: Mensaje = await Mensaje.findOrFail(params.id);
-        const body = request.body();
-        theMensaje.contenido = body.contenido;
-        theMensaje.fecha = body.fecha;
-        theMensaje.hora = body.hora;
-        theMensaje.chat_id = body.chat_id;
+        const now = new Date();
+        await request.validate(MensajeValidator);
+        const data = {
+            ...request.only(['contenido', 'chat_id', 'user_id']),
+            fecha: now,
+            hora: now.toLocaleTimeString()
+        };
+        theMensaje.merge(data);
         return await theMensaje.save();
     }
 
     public async delete({ params, response }: HttpContextContract) {
         const theMensaje: Mensaje = await Mensaje.findOrFail(params.id);
-            response.status(204);
-            return await theMensaje.delete();
+        response.status(204);
+        return await theMensaje.delete();
     }
 }
