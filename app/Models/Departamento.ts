@@ -16,9 +16,9 @@ export default class Departamento extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Gobernante, {
-    pivotTable: 'gobernadores_departamentos',
+    pivotTable: 'gobernante_departamentos',
     pivotForeignKey: 'departamento_id',
-    pivotRelatedForeignKey: 'gobernante_id',
+    pivotRelatedForeignKey: 'gobernante_id'
   })
   public gobernantes: ManyToMany<typeof Gobernante>
 }
