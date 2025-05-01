@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Obra from './Obra'
 import Gobernante from './Gobernante'
+import Departamento from './Departamento'
 
 export default class Municipio extends BaseModel {
   @column({ isPrimary: true })
@@ -32,4 +33,9 @@ export default class Municipio extends BaseModel {
     pivotRelatedForeignKey: 'obra_id'
   })
   public obras: ManyToMany<typeof Obra>
+
+  @belongsTo(() => Departamento, {
+    foreignKey: 'idDepartamento', 
+  })
+  public departamento: BelongsTo<typeof Departamento>
 }

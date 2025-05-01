@@ -14,6 +14,9 @@ export default class EvidenciaValidator {
     fecha_de_carga: schema.date(),
     idServicio: schema.number([
       rules.exists({ table: 'servicios', column: 'id' })
+    ]),
+    novedad_id: schema.number([
+      rules.exists({ table: 'novedades', column: 'id' })
     ])
   })
 
@@ -26,6 +29,8 @@ export default class EvidenciaValidator {
     'fecha_de_carga.date': 'La fecha de carga debe ser una fecha válida.',
     'idServicio.required': 'El ID del servicio es obligatorio.',
     'idServicio.exists': 'El servicio especificado no existe.',
-    'idServicio.number': 'El ID del servicio debe ser un número.'
+    'idServicio.number': 'El ID del servicio debe ser un número.',
+    'novedad_id.required': 'El ID de la novedad es obligatorio.',
+    'novedad_id.exists': 'La novedad especificada no existe.'
   }
 }

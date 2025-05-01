@@ -34,6 +34,7 @@ export default class EvidenciasController {
         theEvidencia.contenido_archivo = payload.contenido_archivo;
         theEvidencia.fecha_de_carga = payload.fecha_de_carga;
         theEvidencia.idServicio = payload.idServicio;
+        theEvidencia.novedad_id = payload.novedad_id;
         return await theEvidencia.save();
     }
 

@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.string('contenido_archivo').notNullable()
       table.date('fecha_de_carga').notNullable()
       table.integer('idServicio').notNullable().unsigned().references('id').inTable('servicios').onDelete('CASCADE')
+      table.integer('novedad_id').notNullable().unsigned().references('id').inTable('novedades').onDelete('CASCADE')
       
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

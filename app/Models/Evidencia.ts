@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column} from '@ioc:Adonis/Lucid/Orm'
 import Servicio from './Servicio'
+import Novedad from './Novedad'
 
 export default class Evidencia extends BaseModel {
   @column({ isPrimary: true })
@@ -18,6 +19,9 @@ export default class Evidencia extends BaseModel {
   @column()
   public idServicio: number
 
+  @column()
+  public novedad_id: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -28,4 +32,9 @@ export default class Evidencia extends BaseModel {
     foreignKey: 'idServicio',
   })
   public servicio: BelongsTo<typeof Servicio>
+
+  @belongsTo(() => Novedad, {
+    foreignKey: 'novedad_id',
+  })
+  public novedad: BelongsTo<typeof Novedad>
 }
