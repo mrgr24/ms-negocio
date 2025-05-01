@@ -33,25 +33,25 @@ export default class ColombiaApiService {
 
   public async getDepartamentoByNombre(nombreDepartamento: string): Promise<Departamento | null> {
     try {
-      const response = await axios.get(`${this.baseUrl}/${nombreDepartamento}`)
-      return response.data
+        const response = await axios.get(`${this.baseUrl}/${nombreDepartamento}`)
+        return response.data
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return null
-      }
-      throw error
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            throw new Error(`El departamento "${nombreDepartamento}" no fue encontrado en la API.`)
+        }
+        throw error
     }
-  }
+}
 
-  public async getCiudadesByDepartamento(departamento: string): Promise<Ciudad[]> {
+public async getCiudadesByDepartamento(departamento: string): Promise<Ciudad[]> {
     try {
-      const response = await axios.get(`${this.baseUrl}/ciudades/${departamento}`)
-      return response.data
+        const response = await axios.get(`${this.baseUrl}/ciudades/${departamento}`)
+        return response.data
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        return []
-      }
-      throw error
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            throw new Error(`No se encontraron municipios para el departamento "${departamento}".`)
+        }
+        throw error
     }
-  }
+}
 }

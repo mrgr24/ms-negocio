@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+  import { DateTime } from 'luxon'
 import { BaseModel, column, HasMany, hasMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Cuota from './Cuota'
 import Evidencia from './Evidencia'
@@ -31,9 +31,6 @@ export default class Servicio extends BaseModel {
 
   @column()
   public resumen: string
-
-  @column()
-  public idEvidencia: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

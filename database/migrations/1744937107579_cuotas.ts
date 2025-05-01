@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('idServicio').notNullable().unsigned().references('id').inTable('servicios').onDelete('CASCADE')
+      table.integer('valor').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

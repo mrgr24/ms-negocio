@@ -1,24 +1,33 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Municipio from 'App/Models/Municipio';
 import MunicipioValidator from 'App/Validators/MunicipioValidator';
+import ColombiaApiService from 'App/Services/ColombiaApiService'
 
 export default class MunicipiosController {
-    public async find({ request, params }: HttpContextContract) {
-        if (params.id) {
-            let theMunicipio: Municipio = await Municipio.findOrFail(params.id)
-            return theMunicipio;
-        } else {
-            const data = request.all()
-            if ("page" in data && "per_page" in data) {
-                const page = request.input('page', 1);
-                const perPage = request.input("per_page", 20);
-                return await Municipio.query().paginate(page, perPage)
-            } else {
-                return await Municipio.query()
+    private colombiaApi: ColombiaApiService
+
+    constructor() {
+        this.colombiaApi = new ColombiaApiService()
+    }
+    
+    public async find({ params, request, response }: HttpContextContract) {
+        try {
+            const { departamento } = request.qs()
+    
+            if (!departamento) {
+                return response.badRequest({ message: 'El parámetro "departamento" es obligatorio.' })
             }
-
+    
+            const municipios = await this.colombiaApi.getCiudadesByDepartamento(departamento)
+    
+            if (municipios.length === 0) {
+                return response.notFound({ message: `No se encontraron municipios para el departamento "${departamento}".` })
+            }
+    
+            return response.ok(municipios)
+        } catch (error) {
+            return response.internalServerError({ message: 'Error al obtener municipios', error: error.message })
         }
-
     }
 
     public async create({ request }: HttpContextContract) {

@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
 
-
 export default class MsSecMid {
   public async handle({ request, response }: HttpContextContract, next: () => Promise<void>) {
     const theRequest = request.toJSON()
@@ -15,8 +14,12 @@ export default class MsSecMid {
     }
 
     const token = theRequest.headers.authorization.replace('Bearer ', '')
+
+    // Normalizar la URL reemplazando IDs dinámicos con ":id"
+    const normalizedUrl = theRequest.url.replace(/\/\d+(?=\/|$)/g, '/:id')
+
     const thePermission = {
-      url: theRequest.url,
+      url: normalizedUrl,
       method: theRequest.method,
     }
 

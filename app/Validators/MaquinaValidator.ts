@@ -5,22 +5,22 @@ export default class MaquinaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    Especialidad: schema.string({ trim: true }, [
+    especialidad: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    Marca: schema.string({ trim: true }, [
+    marca: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    Modelo: schema.string({ trim: true }, [
+    modelo: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    Estado: schema.string({ trim: true }, [
+    estado: schema.string({ trim: true }, [
       rules.maxLength(50)
     ]),
-    Ubicacion: schema.string({ trim: true }, [
+    ubicacion: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    Disponibilidad: schema.boolean.optional(),
+    disponibilidad: schema.boolean.optional(),
     fecha_asignacion: schema.date.optional(),
     fecha_retiro: schema.date.optional({}, [
       rules.afterField('fecha_asignacion')

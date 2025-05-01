@@ -7,7 +7,9 @@ export default class CuotaValidator {
   public schema = schema.create({
     idServicio: schema.number([
       rules.exists({ table: 'servicios', column: 'id' }),
-    ])
+    ]),
+    valor : schema.number(),
+  
   })
 
   public messages: CustomMessages = {
