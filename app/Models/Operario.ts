@@ -21,7 +21,7 @@ export default class Operario extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Especialidad, {
-    pivotTable: 'operario_especialidades',
+    pivotTable: 'operario_especialidads',
     pivotForeignKey: 'operario_id',
     pivotRelatedForeignKey: 'especialidad_id',
   })

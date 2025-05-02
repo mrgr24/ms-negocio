@@ -9,7 +9,7 @@ export default class OperarioEspecialidadValidator {
       rules.exists({ table: 'operarios', column: 'id' }),
     ]),
     especialidad_id: schema.number([
-      rules.exists({ table: 'especialidades', column: 'id' }),
+      rules.exists({ table: 'especialidads', column: 'id' }),
     ]),
     nivel_experiencia: schema.string({ trim: true }, [
       rules.required(),

@@ -3,6 +3,7 @@ import { BaseModel, column, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm
 import Operario from 'App/Models/Operario'
 
 export default class Especialidad extends BaseModel {
+
   @column({ isPrimary: true })
   public id: number
 
@@ -16,7 +17,7 @@ export default class Especialidad extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Operario, {
-    pivotTable: 'operario_especialidades',
+    pivotTable: 'operario_especialidads',
     pivotForeignKey: 'especialidad_id',
     pivotRelatedForeignKey: 'operario_id',
   })
