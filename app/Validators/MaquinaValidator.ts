@@ -28,17 +28,17 @@ export default class MaquinaValidator {
   })
 
   public messages: CustomMessages = {
-    'Especialidad.required': 'La especialidad de la máquina es obligatoria.',
-    'Especialidad.maxLength': 'La especialidad no puede exceder los 255 caracteres.',
-    'Marca.required': 'La marca de la máquina es obligatoria.',
-    'Marca.maxLength': 'La marca no puede exceder los 255 caracteres.',
-    'Modelo.required': 'El modelo de la máquina es obligatorio.',
-    'Modelo.maxLength': 'El modelo no puede exceder los 255 caracteres.',
-    'Estado.required': 'El estado de la máquina es obligatorio.',
-    'Estado.maxLength': 'El estado no puede exceder los 50 caracteres.',
-    'Ubicacion.required': 'La ubicación de la máquina es obligatoria.',
-    'Ubicacion.maxLength': 'La ubicación no puede exceder los 255 caracteres.',
-    'Disponibilidad.boolean': 'La disponibilidad debe ser un valor booleano.',
+    'especialidad.required': 'La especialidad de la máquina es obligatoria.',
+    'especialidad.maxLength': 'La especialidad no puede exceder los 255 caracteres.',
+    'marca.required': 'La marca de la máquina es obligatoria.',
+    'marca.maxLength': 'La marca no puede exceder los 255 caracteres.',
+    'modelo.required': 'El modelo de la máquina es obligatorio.',
+    'modelo.maxLength': 'El modelo no puede exceder los 255 caracteres.',
+    'estado.required': 'El estado de la máquina es obligatorio.',
+    'estado.maxLength': 'El estado no puede exceder los 50 caracteres.',
+    'ubicacion.required': 'La ubicación de la máquina es obligatoria.',
+    'ubicacion.maxLength': 'La ubicación no puede exceder los 255 caracteres.',
+    'disponibilidad.boolean': 'La disponibilidad debe ser un valor booleano.',
     'fecha_retiro.afterField': 'La fecha de retiro debe ser posterior a la fecha de asignación.'
   }
 }

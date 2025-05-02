@@ -8,7 +8,7 @@ export default class MunicipioValidator {
     nombre: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    idDepartamento: schema.number([
+    departamento_id: schema.number([
       rules.exists({ table: 'departamentos', column: 'id' })
     ])
   })
@@ -16,7 +16,7 @@ export default class MunicipioValidator {
   public messages: CustomMessages = {
     'nombre.required': 'El nombre del municipio es obligatorio.',
     'nombre.maxLength': 'El nombre no puede exceder los 255 caracteres.',
-    'idDepartamento.required': 'El ID del departamento es obligatorio.',
-    'idDepartamento.exists': 'El departamento especificado no existe.'
+    'departamento_id.required': 'El ID del departamento es obligatorio.',
+    'departamento_id.exists': 'El departamento especificado no existe.'
   }
 }

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import Departamento from './Departamento'
+import Municipio from './Municipio'
 
 export default class Gobernante extends BaseModel {
   @column({ isPrimary: true })
@@ -19,4 +21,20 @@ export default class Gobernante extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @manyToMany(() => Departamento, {
+    pivotTable: 'gobernante_departamentos',
+    pivotColumns: ['fecha_inicio', 'fecha_fin'],
+    // Columnas adicionales en la tabla intermedia
+  })
+  public departamentos: ManyToMany<typeof Departamento>
+
+  // Relación manyToMany con municipios
+  @manyToMany(() => Municipio, {
+    pivotTable: 'gobernante_municipios',
+    pivotColumns: ['fecha_inicio', 'fecha_fin'], // Columnas adicionales en la tabla intermedia
+  })
+  public municipios: ManyToMany<typeof Municipio>
 }
+
+
