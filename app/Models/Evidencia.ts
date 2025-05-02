@@ -13,7 +13,7 @@ export default class Evidencia extends BaseModel {
   @column()
   public contenido_archivo: string
 
-  @column()
+  @column.dateTime()
   public fecha_de_carga: DateTime
 
   @column()

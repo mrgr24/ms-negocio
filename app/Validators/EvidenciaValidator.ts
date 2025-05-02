@@ -16,7 +16,7 @@ export default class EvidenciaValidator {
       rules.exists({ table: 'servicios', column: 'id' })
     ]),
     novedad_id: schema.number([
-      rules.exists({ table: 'novedades', column: 'id' })
+      rules.exists({ table: 'novedads', column: 'id' })
     ])
   })
 

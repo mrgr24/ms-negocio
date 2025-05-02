@@ -14,9 +14,6 @@ export default class Novedad extends BaseModel {
   public descripcion: string
 
   @column()
-  public evidencia: DateTime
-
-  @column()
   public gravedad: string
 
   @column()

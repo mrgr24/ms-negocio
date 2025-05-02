@@ -26,9 +26,8 @@ export default class NovedadesController {
         const theNovedad: Novedad = await Novedad.create({
             tipo: payload.tipo,
             descripcion: payload.descripcion,
-            evidencia: payload.evidencia,
             gravedad: payload.gravedad,
-            turno_id: payload.turnoId
+            turno_id: payload.turno_id
         });
         return theNovedad;
     }
@@ -38,9 +37,8 @@ export default class NovedadesController {
         const payload = await request.validate(NovedadValidator);
         theNovedad.tipo = payload.tipo;
         theNovedad.descripcion = payload.descripcion;
-        theNovedad.evidencia = payload.evidencia;
         theNovedad.gravedad = payload.gravedad;
-        theNovedad.turno_id = payload.turnoId;
+        theNovedad.turno_id = payload.turno_id;
         return await theNovedad.save();
     }
 
