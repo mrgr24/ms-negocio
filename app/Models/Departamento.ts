@@ -19,7 +19,8 @@ export default class Departamento extends BaseModel {
   @manyToMany(() => Gobernante, {
     pivotTable: 'gobernante_departamentos',
     pivotForeignKey: 'departamento_id',
-    pivotRelatedForeignKey: 'gobernante_id'
+    pivotRelatedForeignKey: 'gobernante_id',
+    pivotColumns: ['fecha_inicio', 'fecha_fin'], // Columnas adicionales en la tabla intermedia
   })
   public gobernantes: ManyToMany<typeof Gobernante>
 
@@ -27,5 +28,7 @@ export default class Departamento extends BaseModel {
     foreignKey: 'departamento_id',
   })
   public municipios: HasMany<typeof Municipio>
+
+
 }
 

@@ -3,29 +3,22 @@ import Chat from 'App/Models/Chat';
 import ChatValidator from 'App/Validators/ChatValidator';
 
 export default class ChatsController {
-    public async find({ request, params }: HttpContextContract) {
-        if (params.id) {
-            let theChat: Chat = await Chat.findOrFail(params.id)
-            return theChat;
-        } else {
-            const data = request.all()
-            if ("page" in data && "per_page" in data) {
-                const page = request.input('page', 1);
-                const perPage = request.input("per_page", 20);
-                return await Chat.query().paginate(page, perPage)
-            } else {
-                return await Chat.query()
-            }
+    public async find({ params, response }: HttpContextContract) {
+        const chat = await Chat.query()
+          .where('id', params.id)
+          .preload('mensajes', (query) => {
+            query.orderBy('createdAt', 'asc') // Ordenar mensajes por fecha
+          })
+          .firstOrFail()
+    
+        return response.json(chat)
+      }
 
-        }
-
-    }
-
-    public async create({ request }: HttpContextContract) {
-        const payload = await request.validate(ChatValidator);
-        const theChat: Chat = await Chat.create(payload);
-        return theChat;
-    }
+    public async create({ request, response }: HttpContextContract) {
+        const { titulo, tipo } = request.only(['titulo', 'tipo'])
+        const chat = await Chat.create({ titulo, tipo })
+        return response.status(201).json(chat)
+      }
 
     public async update({ params, request }: HttpContextContract) {
         const theChat: Chat = await Chat.findOrFail(params.id);
