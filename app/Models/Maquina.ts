@@ -56,7 +56,7 @@ export default class Maquina extends BaseModel {
   public especialidades: ManyToMany<typeof TipoServicio>
 
   @manyToMany(() => Combo, {
-    pivotTable: 'maquinas_combos',
+    pivotTable: 'maquina_combos',
     pivotForeignKey: 'maquina_id',
     pivotRelatedForeignKey: 'combo_id',
   })

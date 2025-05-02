@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Municipio from './Municipio'
+import Combo from './Combo'
 
 export default class Obra extends BaseModel {
   @column({ isPrimary: true })
@@ -19,9 +20,14 @@ export default class Obra extends BaseModel {
   public updatedAt: DateTime
 
   @manyToMany(() => Municipio, {
-    pivotTable: 'obras_municipios',
+    pivotTable: 'obra_municipios',
     pivotForeignKey: 'obra_id',
     pivotRelatedForeignKey: 'municipio_id',
   })
   public municipios: ManyToMany<typeof Municipio>
+
+  @belongsTo(() => Combo, {
+    foreignKey: 'combo_id',
+  })
+  public combo: BelongsTo<typeof Combo>
 }

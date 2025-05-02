@@ -3,6 +3,7 @@ import Operario from 'App/Models/Operario'
 import OperarioValidator from 'App/Validators/OperarioValidator'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
+import { Exception } from '@adonisjs/core/build/standalone'
 
 interface User {
   _id: string
@@ -11,36 +12,84 @@ interface User {
 }
 
 export default class OperariosController {
-  // Crear un operario
   public async create({ request, response }: HttpContextContract) {
-    const payload = await request.validate(OperarioValidator)
-    const { user_id, experiencia } = payload
-
-    // Verificar si el usuario existe en ms-security
-    let user: User
     try {
-      const userResponse = await axios.get<User>(`${Env.get('MS_SECURITY')}/api/users/${user_id}`, {
-        headers: {
-          Authorization: request.header('Authorization'),
-        },
+      // Validar los datos de entrada usando OperarioValidator
+      const payload = await request.validate(OperarioValidator)
+      const { user_id, experiencia } = payload
+
+      // Verificar si el usuario existe en ms-security
+      let user: User
+      try {
+        const userResponse = await axios.get<User>(`${Env.get('MS_SECURITY')}/api/users/${user_id}`, {
+          headers: {
+            Authorization: request.header('Authorization'),
+          },
+        })
+        user = userResponse.data
+
+        // Validar que los datos del usuario estén completos
+        if (!user || !user._id || !user.name || !user.email) {
+          return response.status(400).json({
+            status: 'error',
+            message: 'Los datos del usuario no son válidos o están incompletos'
+          })
+        }
+
+      } catch (error) {
+        return response.status(404).json({
+          status: 'error',
+          message: 'Usuario no encontrado',
+          error: 'El usuario no existe en ms-security'
+        })
+      }
+
+      // Verificar si ya existe un operario con ese user_id
+      const existingOperario = await Operario.query()
+        .where('user_id', user._id)
+        .first()
+
+      if (existingOperario) {
+        throw new Exception(
+          'Este usuario ya está registrado como operario',
+          422,
+          'E_DUPLICATE_OPERARIO'
+        )
+      }
+
+      // Crear el operario
+      const operario = await Operario.create({
+        user_id: user._id,
+        experiencia,
       })
-      user = userResponse.data
+
+      return response.status(201).json({
+        status: 'success',
+        message: 'Operario creado exitosamente',
+        data: {
+          id: operario.id,
+          name: user.name,
+          email: user.email,
+          experiencia: operario.experiencia,
+        }
+      })
+
     } catch (error) {
-      return response.status(404).send({ message: 'El usuario no existe en ms-security', error: error.response?.data || error.message })
+      // Si es un error de validación, devolver el mensaje del validator
+      if (error.messages) {
+        return response.status(422).json({
+          status: 'error',
+          message: 'Error de validación',
+          errors: error.messages
+        })
+      }
+      
+      // Para otros tipos de errores
+      return response.status(400).json({
+        status: 'error',
+        message: error.message || 'Ha ocurrido un error al procesar la solicitud'
+      })
     }
-
-    // Crear el operario en ms-negocio
-    const operario = await Operario.create({
-      user_id: user._id,
-      experiencia,
-    })
-
-    return response.status(201).send({
-      id: operario.id,
-      name: user.name,
-      email: user.email,
-      experiencia: operario.experiencia,
-    })
   }
 
   // Obtener operarios

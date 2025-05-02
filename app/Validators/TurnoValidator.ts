@@ -6,10 +6,10 @@ export default class TurnoValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    operarioId: schema.number([
+    operario_id: schema.number([
       rules.exists({ table: 'operarios', column: 'id' }),
     ]),
-    maquinaId: schema.number([
+    maquina_id: schema.number([
       rules.exists({ table: 'maquinas', column: 'id' }),
     ]),
     fecha: schema.date(),
@@ -19,10 +19,10 @@ export default class TurnoValidator {
   })
 
   public messages: CustomMessages = {
-    'operarioId.required': 'El ID del operario es obligatorio.',
-    'operarioId.exists': 'El operario especificado no existe.',
-    'maquinaId.required': 'El ID de la máquina es obligatorio.',
-    'maquinaId.exists': 'La máquina especificada no existe.',
+    'operario_id.required': 'El ID del operario es obligatorio.',
+    'operario_id.exists': 'El operario especificado no existe.',
+    'maquina_id.required': 'El ID de la máquina es obligatorio.',
+    'maquina_id.exists': 'La máquina especificada no existe.',
     'fecha.required': 'La fecha es obligatoria.',
     'hora.required': 'La hora es obligatoria.',
     'hora.regex': 'El formato de hora debe ser HH:MM:SS'

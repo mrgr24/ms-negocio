@@ -8,7 +8,7 @@ export default class ObraMunicipioValidator {
     obra_id: schema.number([
       rules.exists({ table: 'obras', column: 'id' }),
     ]),
-    municipio_id: schema.number([
+    municipio_id: schema.string([
       rules.exists({ table: 'municipios', column: 'id' }),
     ]),
   })

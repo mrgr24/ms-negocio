@@ -6,16 +6,17 @@ export default class PolizaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    seguroId: schema.number([
+    seguro_id: schema.number([
       rules.exists({ table: 'seguros', column: 'id' }),
     ]),
-    maquinaId: schema.number.optional([
+    maquina_id: schema.number.optional([
       rules.exists({ table: 'maquinas', column: 'id' }),
     ]),
-    operarioId: schema.number.optional([
+    operario_id: schema.number.optional([
       rules.exists({ table: 'operarios', column: 'id' }),
     ]),
-    tipoPoliza: schema.enum([
+
+    tipo_poliza: schema.enum([
       ...Object.values(TipoPolizaOperario),
       ...Object.values(TipoPolizaMaquinaria)
     ] as const),
@@ -24,12 +25,12 @@ export default class PolizaValidator {
   })
 
   public messages: CustomMessages = {
-    'seguroId.required': 'El ID del seguro es obligatorio.',
-    'seguroId.exists': 'El seguro especificado no existe.',
-    'maquinaId.exists': 'La máquina especificada no existe.',
-    'operarioId.exists': 'El operario especificado no existe.',
-    'tipoPoliza.required': 'El tipo de póliza es obligatorio.',
-    'tipoPoliza.enum': 'El tipo de póliza debe ser uno de los valores permitidos.',
+    'seguro_id.required': 'El ID del seguro es obligatorio.',
+    'seguro_id.exists': 'El seguro especificado no existe.',
+    'maquina_id.exists': 'La máquina especificada no existe.',
+    'operario_id.exists': 'El operario especificado no existe.',
+    'tipo_poliza.required': 'El tipo de póliza es obligatorio.',
+    'tipo_poliza.enum': 'El tipo de póliza debe ser uno de los valores permitidos.',
     'fechaInicio.required': 'La fecha de inicio es obligatoria.',
     'fechaFin.required': 'La fecha de fin es obligatoria.',
   }

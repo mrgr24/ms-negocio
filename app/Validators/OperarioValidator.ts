@@ -16,9 +16,9 @@ export default class OperarioValidator {
   })
 
   public messages: CustomMessages = {
-    'user_id.required': 'El ID del usuario es obligatorio.',
-    'user_id.unique': 'Este usuario ya está registrado como operario.',
-    'experiencia.required': 'La experiencia del operario es obligatoria.',
-    'experiencia.maxLength': 'La experiencia no puede exceder los 255 caracteres.'
+    'user_id.required': 'El ID del usuario es obligatorio',
+    'user_id.unique': 'Este usuario ya está registrado como operario',
+    'experiencia.required': 'La experiencia del operario es obligatoria',
+    'experiencia.maxLength': 'La experiencia no puede exceder los 255 caracteres'
   }
 }

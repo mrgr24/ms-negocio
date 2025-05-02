@@ -8,7 +8,7 @@ export default class ObraValidator {
     nombre: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    comboId: schema.number([
+    combo_id: schema.number([
       rules.exists({ table: 'combos', column: 'id' })
     ])
   })
@@ -16,8 +16,8 @@ export default class ObraValidator {
   public messages: CustomMessages = {
     'nombre.required': 'El nombre de la obra es obligatorio.',
     'nombre.maxLength': 'El nombre no puede exceder los 255 caracteres.',
-    'comboId.required': 'El ID del combo es obligatorio.',
-    'comboId.exists': 'El combo especificado no existe.',
-    'comboId.number': 'El ID del combo debe ser un número.'
+    'combo_id.required': 'El ID del combo es obligatorio.',
+    'combo_id.exists': 'El combo especificado no existe.',
+    'combo_id.number': 'El ID del combo debe ser un número.'
   }
 }

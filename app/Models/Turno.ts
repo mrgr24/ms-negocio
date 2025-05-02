@@ -6,10 +6,10 @@ export default class Turno extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column() 
+  @column.dateTime() 
   public fecha: DateTime
 
-  @column()
+  @column.dateTime()
   public hora: DateTime
 
   @column()

@@ -28,7 +28,7 @@ export default class ObrasController {
         const payload = await request.validate(ObraValidator);
         const theObra: Obra = await Obra.create({
             nombre: payload.nombre,
-            combo_id: payload.comboId
+            combo_id: payload.combo_id
         });
 
         if (request.input('municipios')) {
@@ -43,7 +43,7 @@ export default class ObrasController {
         const theObra: Obra = await Obra.findOrFail(params.id);
         const payload = await request.validate(ObraValidator);
         theObra.nombre = payload.nombre;
-        theObra.combo_id = payload.comboId;
+        theObra.combo_id = payload.combo_id;
         await theObra.save();
 
         if (request.input('municipios')) {

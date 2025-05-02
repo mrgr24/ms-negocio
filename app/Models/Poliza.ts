@@ -34,10 +34,10 @@ export default class Poliza extends BaseModel {
   @column()
   public tipo_poliza: TipoPoliza
 
-  @column()
+  @column.dateTime()
   public fechaInicio: DateTime
 
-  @column()
+  @column.dateTime()
   public fechaFin: DateTime
 
   @column.dateTime({ autoCreate: true })

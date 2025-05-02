@@ -6,13 +6,14 @@ export default class ComboValidator {
 
   public schema = schema.create({
     servicio_id: schema.number([
+      rules.required(),
       rules.exists({ table: 'servicios', column: 'id' })
     ])
   })
 
   public messages: CustomMessages = {
-    'servicio_id.required': 'El ID del servicio es obligatorio.',
-    'servicio_id.exists': 'El servicio seleccionado no existe.',
-    'servicio_id.number': 'El ID del servicio debe ser un número.'
+    'servicio_id.required': 'El ID del servicio es obligatorio',
+    'servicio_id.exists': 'El servicio seleccionado no existe',
+    'servicio_id.number': 'El ID del servicio debe ser un número'
   }
 }

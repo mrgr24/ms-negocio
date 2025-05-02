@@ -7,7 +7,7 @@ export default class Mantenimiento extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column.dateTime()
   public fecha: DateTime
 
   @column()

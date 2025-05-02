@@ -27,8 +27,8 @@ export default class TurnosController {
         const theTurno: Turno = await Turno.create({
             fecha: payload.fecha,
             hora: DateTime.fromFormat(payload.hora, 'HH:mm:ss'),
-            operario_id: payload.operarioId,
-            maquina_id: payload.maquinaId
+            operario_id: payload.operario_id,
+            maquina_id: payload.maquina_id
         })
         return theTurno
     }
@@ -38,8 +38,8 @@ export default class TurnosController {
         const payload = await request.validate(TurnoValidator)
         theTurno.fecha = payload.fecha
         theTurno.hora = DateTime.fromFormat(payload.hora, 'HH:mm:ss')
-        theTurno.operario_id = payload.operarioId
-        theTurno.maquina_id = payload.maquinaId
+        theTurno.operario_id = payload.operario_id
+        theTurno.maquina_id = payload.maquina_id
         return await theTurno.save()
     }
 

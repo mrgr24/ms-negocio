@@ -23,7 +23,10 @@ export default class GobernantesMunicipiosController {
 
     public async create({ request }: HttpContextContract) {
         const payload = await request.validate(GobernanteMunicipioValidator);
-        const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.create(payload);
+        const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.create({
+            ...payload,
+            municipio_id: payload.municipio_id.toString(),
+        });
         return theGobernanteMunicipio;
     }
 
@@ -31,7 +34,7 @@ export default class GobernantesMunicipiosController {
         const theGobernanteMunicipio: GobernanteMunicipio = await GobernanteMunicipio.findOrFail(params.id);
         const payload = await request.validate(GobernanteMunicipioValidator);
         theGobernanteMunicipio.gobernante_id = payload.gobernante_id;
-        theGobernanteMunicipio.municipio_id = payload.municipio_id;
+        theGobernanteMunicipio.municipio_id = payload.municipio_id.toString();
         theGobernanteMunicipio.fecha_inicio = payload.fecha_inicio;
         theGobernanteMunicipio.fecha_fin = payload.fecha_fin;
         return await theGobernanteMunicipio.save();

@@ -23,7 +23,7 @@ export default class PolizasController {
     const body = await request.validate(PolizaValidator)
 
     // Validación XOR y tipo de póliza
-    if ((body.operarioId && body.maquinaId) || (!body.operarioId && !body.maquinaId)) {
+    if ((body.operario_id && body.maquina_id) || (!body.operario_id && !body.maquina_id)) {
       return response.badRequest({
         message: 'La póliza debe estar asociada a un operario o a una máquina, pero no a ambos o ninguno.',
       })
@@ -33,23 +33,23 @@ export default class PolizasController {
     const tiposPolizaOperario = Object.values(TipoPolizaOperario)
     const tiposPolizaMaquinaria = Object.values(TipoPolizaMaquinaria)
 
-    if (body.operarioId && !tiposPolizaOperario.includes(body.tipoPoliza as TipoPolizaOperario)) {
+    if (body.operario_id && !tiposPolizaOperario.includes(body.tipo_poliza as TipoPolizaOperario)) {
       return response.badRequest({
         message: 'El tipo de póliza no es válido para un operario.',
       })
     }
 
-    if (body.maquinaId && !tiposPolizaMaquinaria.includes(body.tipoPoliza as TipoPolizaMaquinaria)) {
+    if (body.maquina_id && !tiposPolizaMaquinaria.includes(body.tipo_poliza as TipoPolizaMaquinaria)) {
       return response.badRequest({
         message: 'El tipo de póliza no es válido para una maquinaria.',
       })
     }
 
     const thePoliza: Poliza = await Poliza.create({
-      seguro_id: body.seguroId,
-      maquina_id: body.maquinaId || null,
-      operario_id: body.operarioId || null,
-      tipo_poliza: body.tipoPoliza,
+      seguro_id: body.seguro_id,
+      maquina_id: body.maquina_id || null,
+      operario_id: body.operario_id || null,
+      tipo_poliza: body.tipo_poliza,
       fechaInicio: body.fechaInicio,
       fechaFin: body.fechaFin,
     })
@@ -62,7 +62,7 @@ export default class PolizasController {
     const body = await request.validate(PolizaValidator)
 
     // Validación XOR y tipo de póliza
-    if ((body.operarioId && body.maquinaId) || (!body.operarioId && !body.maquinaId)) {
+    if ((body.operario_id && body.maquina_id) || (!body.operario_id && !body.maquina_id)) {
       return response.badRequest({
         message: 'La póliza debe estar asociada a un operario o a una máquina, pero no a ambos o ninguno.',
       })
@@ -72,22 +72,22 @@ export default class PolizasController {
     const tiposPolizaOperario = Object.values(TipoPolizaOperario)
     const tiposPolizaMaquinaria = Object.values(TipoPolizaMaquinaria)
 
-    if (body.operarioId && !tiposPolizaOperario.includes(body.tipoPoliza as TipoPolizaOperario)) {
+    if (body.operario_id && !tiposPolizaOperario.includes(body.tipo_poliza as TipoPolizaOperario)) {
       return response.badRequest({
         message: 'El tipo de póliza no es válido para un operario.',
       })
     }
 
-    if (body.maquinaId && !tiposPolizaMaquinaria.includes(body.tipoPoliza as TipoPolizaMaquinaria)) {
+    if (body.maquina_id && !tiposPolizaMaquinaria.includes(body.tipo_poliza as TipoPolizaMaquinaria)) {
       return response.badRequest({
         message: 'El tipo de póliza no es válido para una maquinaria.',
       })
     }
 
-    thePoliza.seguro_id = body.seguroId
-    thePoliza.maquina_id = body.maquinaId || null
-    thePoliza.operario_id = body.operarioId || null
-    thePoliza.tipo_poliza = body.tipoPoliza
+    thePoliza.seguro_id = body.seguro_id
+    thePoliza.maquina_id = body.maquina_id || null
+    thePoliza.operario_id = body.operario_id || null
+    thePoliza.tipo_poliza = body.tipo_poliza
     thePoliza.fechaInicio = body.fechaInicio
     thePoliza.fechaFin = body.fechaFin
 

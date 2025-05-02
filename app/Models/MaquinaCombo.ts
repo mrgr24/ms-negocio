@@ -11,6 +11,12 @@ export default class MaquinaCombo extends BaseModel {
   @column()
   public combo_id: number
 
+  @column.dateTime()
+  public fecha_inicio: DateTime
+
+  @column.dateTime()
+  public fecha_fin: DateTime
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

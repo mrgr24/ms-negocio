@@ -29,7 +29,7 @@ export default class Municipio extends BaseModel {
   public gobernantes: ManyToMany<typeof Gobernante>
 
   @manyToMany (() => Obra, {
-    pivotTable : 'obras_municipios',
+    pivotTable : 'obra_municipios',
     pivotForeignKey: 'municipio_id',
     pivotRelatedForeignKey: 'obra_id'
   })
