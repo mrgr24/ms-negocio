@@ -8,7 +8,7 @@ export default class Cuota extends BaseModel {
   public id: number
 
   @column()
-  public idServicio: number
+  public id_servicio: number
 
   @column()
   public valor: number
@@ -20,12 +20,12 @@ export default class Cuota extends BaseModel {
   public updatedAt: DateTime
 
   @hasOne(() => Factura, {
-    foreignKey: 'idCuota',
+    foreignKey: 'id_cuota',
   })
   public factura: HasOne<typeof Factura>  
 
   @belongsTo(() => Servicio, {
-    foreignKey: 'idServicio',
+    foreignKey: 'id_servicio',
   })
   public servicio: BelongsTo<typeof Servicio>
 }

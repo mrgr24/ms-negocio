@@ -12,7 +12,7 @@ export default class EvidenciaValidator {
       rules.maxLength(1000)
     ]),
     fecha_de_carga: schema.date(),
-    idServicio: schema.number([
+    id_servicio: schema.number([
       rules.exists({ table: 'servicios', column: 'id' })
     ]),
     novedad_id: schema.number([
@@ -27,9 +27,9 @@ export default class EvidenciaValidator {
     'contenido_archivo.maxLength': 'El contenido del archivo no puede exceder los 1000 caracteres.',
     'fecha_de_carga.required': 'La fecha de carga es obligatoria.',
     'fecha_de_carga.date': 'La fecha de carga debe ser una fecha válida.',
-    'idServicio.required': 'El ID del servicio es obligatorio.',
-    'idServicio.exists': 'El servicio especificado no existe.',
-    'idServicio.number': 'El ID del servicio debe ser un número.',
+    'id_servicio.required': 'El ID del servicio es obligatorio.',
+    'id_servicio.exists': 'El servicio especificado no existe.',
+    'id_servicio.number': 'El ID del servicio debe ser un número.',
     'novedad_id.required': 'El ID de la novedad es obligatorio.',
     'novedad_id.exists': 'La novedad especificada no existe.'
   }

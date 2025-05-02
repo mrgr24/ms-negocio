@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('detalle').notNullable()
-      table.integer('idCuota').unsigned().references('id').inTable('cuotas').onDelete('CASCADE')
+      table.integer('id_cuota').unsigned().references('id').inTable('cuotas').onDelete('CASCADE')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

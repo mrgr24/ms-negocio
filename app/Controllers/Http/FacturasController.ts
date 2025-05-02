@@ -31,7 +31,7 @@ export default class FacturasController {
         const theFactura: Factura = await Factura.findOrFail(params.id);
         const payload = await request.validate(FacturaValidator);
         theFactura.detalle = payload.detalle;
-        theFactura.idCuota = payload.idCuota;
+        theFactura.id_cuota = payload.id_cuota;
         return await theFactura.save();
     }
 

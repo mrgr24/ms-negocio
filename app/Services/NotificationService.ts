@@ -41,35 +41,4 @@ export default class NotificationService {
       return false
     }
   }
-
-  /**
-   * Envía información de pago
-   */
-  public async sendPaymentInfo(recipient: string, message: string, subject: string): Promise<boolean> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/send_payment_info`, {
-        recipient,
-        message,
-        subject
-      })
-
-      return response.data.mensaje === "the message has been sent"
-    } catch (error) {
-      console.error('Error sending payment info:', error)
-      return false
-    }
-  }
-
-  /**
-   * Obtiene información de una factura por su ID
-   */
-  public async getInvoice(shareId: string) {
-    try {
-      const response = await axios.get(`${this.baseUrl}/shares/${shareId}`)
-      return response.data
-    } catch (error) {
-      console.error('Error getting invoice:', error)
-      return null
-    }
-  }
 }

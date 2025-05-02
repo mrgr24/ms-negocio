@@ -8,7 +8,7 @@ export default class FacturaValidator {
     detalle: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    idCuota: schema.number([
+    id_cuota: schema.number([
       rules.exists({ table: 'cuotas', column: 'id' })
     ])
   })
@@ -16,8 +16,8 @@ export default class FacturaValidator {
   public messages: CustomMessages = {
     'detalle.required': 'El detalle de la factura es obligatorio.',
     'detalle.maxLength': 'El detalle de la factura no puede exceder los 255 caracteres.',
-    'idCuota.required': 'El ID de la cuota es obligatorio.',
-    'idCuota.exists': 'La cuota especificada no existe.',
-    'idCuota.number': 'El ID de la cuota debe ser un número.'
+    'id_cuota.required': 'El ID de la cuota es obligatorio.',
+    'id_cuota.exists': 'La cuota especificada no existe.',
+    'id_cuota.number': 'El ID de la cuota debe ser un número.'
   }
 }

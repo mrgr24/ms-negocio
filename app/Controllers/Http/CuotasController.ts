@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Cuota from 'App/Models/Cuota';
 import CuotaValidator from 'App/Validators/CuotaValidator';
+import PaymentService from 'App/Services/PaymentService';
 import axios from 'axios';
 import Env from '@ioc:Adonis/Core/Env'
 
@@ -32,7 +33,7 @@ export default class CuotasController {
     public async update({ params, request }: HttpContextContract) {
         const theCuota: Cuota = await Cuota.findOrFail(params.id);
         const payload = await request.validate(CuotaValidator);
-        theCuota.idServicio = payload.idServicio;
+        theCuota.id_servicio = payload.id_servicio;
         return await theCuota.save();
     }
 
@@ -46,12 +47,29 @@ export default class CuotasController {
         try {
             const theCuota: Cuota = await Cuota.findOrFail(params.id);
 
-            if (theCuota.factura) {
-                return response.status(400).json({ message: "La cuota ya ha sido pagada" });
+            // Validar que todos los campos requeridos estén presentes
+            const requiredFields = [
+                'card_number',
+                'card_exp_year',
+                'card_exp_month',
+                'card_cvc',
+                'customer_name',
+                'customer_last_name',
+                'customer_email',
+                'customer_phone',
+                'customer_doc_number'
+            ];
+
+            for (const field of requiredFields) {
+                if (!request.input(field)) {
+                    return response.status(400).json({
+                        error: `El campo ${field} es requerido`
+                    });
+                }
             }
 
-            // Construir el objeto JSON a partir del request
-            const json = {
+            // Construir los datos de pago
+            const paymentData = {
                 card: {
                     number: request.input('card_number'),
                     exp_year: request.input('card_exp_year'),
@@ -65,52 +83,28 @@ export default class CuotasController {
                     phone: request.input('customer_phone'),
                     doc_number: request.input('customer_doc_number')
                 },
-                due: {
-                    id: theCuota.id,
-                    id_servicio: theCuota.idServicio,
-                    valor: theCuota.valor
-                },
-                description: request.input('description', 'Pago de cuota'),
+                description: request.input('description', `Pago de cuota #${theCuota.id}`),
                 tax: request.input('tax', '0'),
-                tax_base: request.input('tax_base', '0'),
+                tax_base: request.input('tax_base', theCuota.valor.toString()),
                 dues: request.input('dues', '1')
             };
 
-            const payResponse = await axios.post(
-                `${Env.get('MS_PAYMENT')}/charge`,
-                json,
-                {
-                    headers: {
-                        Authorization: `Bearer ${request.headers().authorization}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
+            const result = await PaymentService.processPayment(theCuota, paymentData);
 
-            if (payResponse.status === 200) {
-                theCuota.factura = payResponse.data.idFactura;
-                await theCuota.save();
-                return response.status(200).json({
-                    message: "Pago realizado con éxito",
-                    factura: payResponse.data,
-                });
-            } else {
-                return response.status(payResponse.status).json({
-                    message: "Error al procesar el pago",
-                    details: payResponse.data,
-                });
+            if (result.success) {
+                return response.status(200).json(result.data);
             }
+
+            return response.status(400).json({
+                error: result.error?.message ?? 'Unknown error',
+                details: result.error?.details ?? 'No additional details available'
+            });
+
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                return response.status(error.response?.status || 500).json({
-                    message: "Error al conectar con el microservicio de pagos",
-                    details: error.response?.data || error.message,
-                });
-            }
-
+            console.error('Error en CuotasController:', error);
             return response.status(500).json({
-                message: "Error interno del servidor",
-                details: error.message,
+                error: "Error interno del servidor",
+                details: error.message
             });
         }
     }
