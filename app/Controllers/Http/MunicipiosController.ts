@@ -67,4 +67,24 @@ export default class MunicipiosController {
       })
     }
   }
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const apiUrl = Env.get('COLOMBIA_API_URL')
+      const { data: municipios } = await axios.get(`${apiUrl}/municipios`)
+      const municipio = municipios.find((m) => String(m.id) === String(params.id))
+
+      if (!municipio) {
+        return response.notFound({ message: 'Municipio no encontrado.' })
+      }
+
+      return response.ok({ data: municipio })
+    } catch (error) {
+      console.error('Error al obtener municipio:', error.message)
+      return response.internalServerError({
+        message: 'Error al obtener el municipio desde la API de Colombia.',
+        error: error.message,
+      })
+    }
+  }
 }

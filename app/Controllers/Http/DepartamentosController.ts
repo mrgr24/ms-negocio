@@ -25,6 +25,28 @@ export default class DepartamentosController {
     }
   }
 
+  // ...existing code...
+
+  public async show({ params, response }: HttpContextContract) {
+    try {
+      const apiUrl = Env.get('COLOMBIA_API_URL')
+      const { data: departamento } = await axios.get(`${apiUrl}/departamentos`)
+      const dep = departamento.find((d) => String(d.id) === String(params.id))
+
+      if (!dep) {
+        return response.notFound({ message: 'Departamento no encontrado.' })
+      }
+
+      return response.ok({ data: dep })
+    } catch (error) {
+      console.error('Error al obtener departamento:', error.message)
+      return response.internalServerError({
+        message: 'Error al obtener el departamento desde la API de Colombia.',
+        error: error.message,
+      })
+    }
+  }
+
   public async sincronizar({ response }: HttpContextContract) {
     try {
       const apiUrl = Env.get('COLOMBIA_API_URL')

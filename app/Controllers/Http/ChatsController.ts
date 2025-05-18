@@ -12,7 +12,13 @@ export default class ChatsController {
           .firstOrFail()
     
         return response.json(chat)
-      }
+
+    }
+
+    public async index({ response }: HttpContextContract) {
+      const chats = await Chat.query().preload('mensajes')
+      return response.json(chats)
+    }
 
     public async create({ request, response }: HttpContextContract) {
         const { titulo, tipo } = request.only(['titulo', 'tipo'])
@@ -20,17 +26,29 @@ export default class ChatsController {
         return response.status(201).json(chat)
       }
 
-    public async update({ params, request }: HttpContextContract) {
-        const theChat: Chat = await Chat.findOrFail(params.id);
-        const payload = await request.validate(ChatValidator);
-        theChat.titulo = payload.titulo;
-        theChat.tipo = payload.tipo;
-        return await theChat.save();
+    public async update({ params, request, response }: HttpContextContract) {
+        try {
+            const theChat: Chat = await Chat.findOrFail(params.id)
+            const payload = await request.validate(ChatValidator)
+            theChat.titulo = payload.titulo
+            theChat.tipo = payload.tipo
+            await theChat.save()
+            return response.json(theChat)
+        } catch (error) {
+            if (error.messages) {
+                return response.status(422).json({ errors: error.messages })
+            }
+            return response.status(404).json({ error: 'Chat no encontrado' })
+        }
     }
 
     public async delete({ params, response }: HttpContextContract) {
-        const theChat: Chat = await Chat.findOrFail(params.id);
-            response.status(204);
-            return await theChat.delete();
+        try {
+            const theChat: Chat = await Chat.findOrFail(params.id)
+            await theChat.delete()
+            return response.status(204)
+        } catch {
+            return response.status(404).json({ error: 'Chat no encontrado' })
+        }
     }
 }

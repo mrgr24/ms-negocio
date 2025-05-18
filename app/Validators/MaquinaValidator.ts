@@ -20,7 +20,7 @@ export default class MaquinaValidator {
     ubicacion: schema.string({ trim: true }, [
       rules.maxLength(255)
     ]),
-    disponibilidad: schema.boolean.optional(),
+    disponibilidad: schema.boolean([rules.required()]),
     fecha_asignacion: schema.date.optional(),
     fecha_retiro: schema.date.optional({}, [
       rules.afterField('fecha_asignacion')
@@ -38,6 +38,7 @@ export default class MaquinaValidator {
     'estado.maxLength': 'El estado no puede exceder los 50 caracteres.',
     'ubicacion.required': 'La ubicación de la máquina es obligatoria.',
     'ubicacion.maxLength': 'La ubicación no puede exceder los 255 caracteres.',
+    'disponibilidad.required': 'El campo de disponibilidad es obligatorio.',
     'disponibilidad.boolean': 'La disponibilidad debe ser un valor booleano.',
     'fecha_retiro.afterField': 'La fecha de retiro debe ser posterior a la fecha de asignación.'
   }
