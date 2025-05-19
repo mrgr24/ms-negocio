@@ -6,42 +6,26 @@ import Env from '@ioc:Adonis/Core/Env'
 export default class DepartamentosController {
   public async index({ response }: HttpContextContract) {
     try {
-      const apiUrl = Env.get('COLOMBIA_API_URL')
-
-      // Obtener departamentos desde la API
-      const { data: departamentos } = await axios.get(`${apiUrl}/departamentos`)
-
-      if (!departamentos || departamentos.length === 0) {
-        return response.notFound({ message: 'No se encontraron departamentos en la API.' })
-      }
-
+      const departamentos = await Departamento.all()
       return response.ok({ data: departamentos })
     } catch (error) {
-      console.error('Error al obtener departamentos:', error.message)
       return response.internalServerError({
-        message: 'Error al obtener departamentos desde la API de Colombia.',
+        message: 'Error al obtener departamentos desde la base de datos.',
         error: error.message,
       })
     }
   }
 
-  // ...existing code...
-
   public async show({ params, response }: HttpContextContract) {
     try {
-      const apiUrl = Env.get('COLOMBIA_API_URL')
-      const { data: departamento } = await axios.get(`${apiUrl}/departamentos`)
-      const dep = departamento.find((d) => String(d.id) === String(params.id))
-
-      if (!dep) {
+      const departamento = await Departamento.find(params.id)
+      if (!departamento) {
         return response.notFound({ message: 'Departamento no encontrado.' })
       }
-
-      return response.ok({ data: dep })
+      return response.ok({ data: departamento })
     } catch (error) {
-      console.error('Error al obtener departamento:', error.message)
       return response.internalServerError({
-        message: 'Error al obtener el departamento desde la API de Colombia.',
+        message: 'Error al obtener el departamento desde la base de datos.',
         error: error.message,
       })
     }

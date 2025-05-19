@@ -19,4 +19,5 @@ export default class EspecialidadMaquinaria extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+    especialidad_id: any
 }

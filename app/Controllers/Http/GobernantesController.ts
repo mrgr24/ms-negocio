@@ -140,4 +140,44 @@ export default class GobernantesController {
       });
     }
   }
+
+
+  public async update({ params, request, response }: HttpContextContract) {
+    const gobernante = await Gobernante.findOrFail(params.id)
+    const { periodoInit, periodoEnd, territorio, tipo } = request.only([
+      'periodoInit', 'periodoEnd', 'territorio', 'tipo'
+    ])
+
+    gobernante.periodoInit = periodoInit
+    gobernante.periodoEnd = periodoEnd
+    await gobernante.save()
+
+    // Actualizar territorio
+    if (tipo === 'departamento') {
+      // Elimina asignaciones previas
+      await gobernante.related('departamentos').detach()
+      await gobernante.related('departamentos').attach({
+        [territorio.departamento_id]: {
+          fecha_inicio: periodoInit,
+          fecha_fin: periodoEnd,
+        }
+      })
+    } else if (tipo === 'municipio') {
+      await gobernante.related('municipios').detach()
+      await gobernante.related('municipios').attach({
+        [territorio.municipio_id]: {
+          fecha_inicio: periodoInit,
+          fecha_fin: periodoEnd,
+        }
+      })
+    }
+
+    return response.ok({ message: 'Gobernante actualizado' })
+  }
+
+  public async delete({ params, response }: HttpContextContract) {
+    const gobernante = await Gobernante.findOrFail(params.id)
+    await gobernante.delete()
+    return response.noContent()
+  }
 }

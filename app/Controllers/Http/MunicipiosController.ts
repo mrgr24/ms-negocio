@@ -7,23 +7,19 @@ import Departamento from 'App/Models/Departamento'
 export default class MunicipiosController {
   public async index({ request, response }: HttpContextContract) {
     try {
-      const apiUrl = Env.get('COLOMBIA_API_URL')
-      const departamento = request.input('departamento')
+      const departamentoId = request.input('departamento')
+      let municipios
 
-      const endpoint = departamento
-        ? `${apiUrl}/municipios?departamento=${departamento}`
-        : `${apiUrl}/municipios`
-      const { data: municipios } = await axios.get(endpoint)
-
-      if (!municipios || municipios.length === 0) {
-        return response.notFound({ message: 'No se encontraron municipios en la API.' })
+      if (departamentoId) {
+        municipios = await Municipio.query().where('departamento_id', departamentoId)
+      } else {
+        municipios = await Municipio.all()
       }
 
       return response.ok({ data: municipios })
     } catch (error) {
-      console.error('Error al obtener municipios:', error.message)
       return response.internalServerError({
-        message: 'Error al obtener municipios desde la API de Colombia.',
+        message: 'Error al obtener municipios desde la base de datos.',
         error: error.message,
       })
     }
@@ -70,19 +66,14 @@ export default class MunicipiosController {
 
   public async show({ params, response }: HttpContextContract) {
     try {
-      const apiUrl = Env.get('COLOMBIA_API_URL')
-      const { data: municipios } = await axios.get(`${apiUrl}/municipios`)
-      const municipio = municipios.find((m) => String(m.id) === String(params.id))
-
+      const municipio = await Municipio.find(params.id)
       if (!municipio) {
         return response.notFound({ message: 'Municipio no encontrado.' })
       }
-
       return response.ok({ data: municipio })
     } catch (error) {
-      console.error('Error al obtener municipio:', error.message)
       return response.internalServerError({
-        message: 'Error al obtener el municipio desde la API de Colombia.',
+        message: 'Error al obtener el municipio desde la base de datos.',
         error: error.message,
       })
     }
