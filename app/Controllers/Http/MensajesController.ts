@@ -6,6 +6,52 @@ import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class MensajesController {
+  public async index({ response }: HttpContextContract) {
+    // Obtener todos los mensajes
+    const mensajes = await Mensaje.all()
+
+    // Obtener información de usuarios para cada mensaje
+    const mensajesConUsuarios = await Promise.all(
+      mensajes.map(async (mensaje) => {
+        try {
+          const userResponse = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${mensaje.user_id}`)
+          const userData = userResponse.data
+
+          return {
+            id: mensaje.id,
+            contenido: mensaje.contenido,
+            chat_id: mensaje.chat_id,
+            user_id: mensaje.user_id,
+            fecha: mensaje.fecha,
+            hora: mensaje.hora,
+            emisor: {
+              id: userData._id,
+              name: userData.name,
+              email: userData.email,
+            },
+            created_at: mensaje.createdAt,
+            updated_at: mensaje.updatedAt,
+          }
+        } catch (error) {
+          // Si no se encuentra el usuario, mantener el mensaje pero sin datos del emisor
+          return {
+            id: mensaje.id,
+            contenido: mensaje.contenido,
+            chat_id: mensaje.chat_id,
+            user_id: mensaje.user_id,
+            fecha: mensaje.fecha,
+            hora: mensaje.hora,
+            emisor: null,
+            created_at: mensaje.createdAt,
+            updated_at: mensaje.updatedAt,
+          }
+        }
+      })
+    )
+
+    return response.json(mensajesConUsuarios)
+  }
+
   public async find({ params, response }: HttpContextContract) {
     const mensaje = await Mensaje.findOrFail(params.id)
 
