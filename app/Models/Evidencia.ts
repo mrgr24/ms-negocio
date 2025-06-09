@@ -8,19 +8,15 @@ export default class Evidencia extends BaseModel {
   public id: number
   
   @column()
-  public tipo_de_archivo: string
-
-  @column()
-  public contenido_archivo: string
+  public ruta_archivo: string
 
   @column.dateTime()
   public fecha_de_carga: DateTime
+  @column()
+  public id_servicio: number | null
 
   @column()
-  public id_servicio: number
-
-  @column()
-  public novedad_id: number
+  public novedad_id: number | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

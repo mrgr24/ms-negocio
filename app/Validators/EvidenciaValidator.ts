@@ -5,32 +5,38 @@ export default class EvidenciaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    tipo_de_archivo: schema.string({ trim: true }, [
-      rules.maxLength(255)
-    ]),
-    contenido_archivo: schema.string({ trim: true }, [
-      rules.maxLength(1000)
-    ]),
-    fecha_de_carga: schema.date(),
-    id_servicio: schema.number([
+    id_servicio: schema.number.optional([
       rules.exists({ table: 'servicios', column: 'id' })
     ]),
-    novedad_id: schema.number([
+    novedad_id: schema.number.optional([
       rules.exists({ table: 'novedads', column: 'id' })
     ])
   })
 
+  // Schema para upload de archivos
+  public uploadSchema = schema.create({
+    imagen: schema.file({
+      size: '5mb',
+      extnames: ['jpg', 'jpeg', 'png', 'gif', 'webp']
+    }),
+    id_servicio: schema.number.optional([
+      rules.exists({ table: 'servicios', column: 'id' })
+    ]),
+    novedad_id: schema.number.optional([
+      rules.exists({ table: 'novedads', column: 'id' })
+    ])
+  })
   public messages: CustomMessages = {
-    'tipo_de_archivo.required': 'El tipo de archivo es obligatorio.',
-    'tipo_de_archivo.maxLength': 'El tipo de archivo no puede exceder los 255 caracteres.',
-    'contenido_archivo.required': 'El contenido del archivo es obligatorio.',
-    'contenido_archivo.maxLength': 'El contenido del archivo no puede exceder los 1000 caracteres.',
-    'fecha_de_carga.required': 'La fecha de carga es obligatoria.',
-    'fecha_de_carga.date': 'La fecha de carga debe ser una fecha válida.',
-    'id_servicio.required': 'El ID del servicio es obligatorio.',
+    // Mensajes para validación regular
     'id_servicio.exists': 'El servicio especificado no existe.',
     'id_servicio.number': 'El ID del servicio debe ser un número.',
-    'novedad_id.required': 'El ID de la novedad es obligatorio.',
-    'novedad_id.exists': 'La novedad especificada no existe.'
+    'novedad_id.exists': 'La novedad especificada no existe.',
+    'novedad_id.number': 'El ID de la novedad debe ser un número.',
+    
+    // Mensajes para upload de archivos
+    'imagen.required': 'La imagen es obligatoria.',
+    'imagen.file': 'El archivo debe ser una imagen válida.',
+    'imagen.file.size': 'La imagen no puede exceder los 5MB.',
+    'imagen.file.extnames': 'La imagen debe ser de tipo: jpg, jpeg, png, gif o webp.'
   }
 }

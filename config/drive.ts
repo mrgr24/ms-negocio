@@ -47,13 +47,12 @@ export default driveConfig({
       /*
       |--------------------------------------------------------------------------
       | Storage root - Local driver only
-      |--------------------------------------------------------------------------
-      |
+      |--------------------------------------------------------------------------      |
       | Define an absolute path to the storage directory from where to read the
       | files.
       |
       */
-      root: Application.tmpPath('uploads'),
+      root: Application.publicPath('uploads'),
 
       /*
       |--------------------------------------------------------------------------

@@ -5,4 +5,8 @@ Route.group(() => {
     Route.post("/evidencias", "EvidenciasController.create");
     Route.put("/evidencias/:id", "EvidenciasController.update");
     Route.delete("/evidencias/:id", "EvidenciasController.delete");
+    
+    // Rutas específicas para manejo de archivos
+    Route.post("/evidencias/upload", "EvidenciasController.upload_photo");
+    Route.get("/evidencias/:id/photo", "EvidenciasController.get_photo");
 });

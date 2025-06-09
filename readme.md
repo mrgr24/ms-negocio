@@ -33,6 +33,19 @@ Elimina versiones de las tablas segun orden de creacion
 ``` bash
     node ace migration:rollback
 ```
- 
+
+
+### Web Sucket
+Desde el backend mando algo para el frontend
+
 ### Notas Clase: 
 Creamos lo mismo con Projectors, dependencia entre ellos y referencia con fk, ademas de mirar que sonn los datos y funciones genericas
+
+```bash
+    public async sendMessage({ request }: HttpContextContract) {
+        Ws.io.emit('notifications', { message: 'Nueva Notificación' })
+        return { message: 'Mensaje enviado a todos los clientes conectados' };
+    }
+    Configurar Ruta
+    Route.get("/send-message", "Controlador.sendMessage")
+```
