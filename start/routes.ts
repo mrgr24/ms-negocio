@@ -24,34 +24,35 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-import './routes/Maquinas'
-import './routes/Mensajes'
-import './routes/Departamentos'
-import './routes/Gobernantes'
-import './routes/Chats'
-import './routes/Mensajes'
-import './routes/Servicios'
-import './routes/Turnos'
-import './routes/TipoServicios'
-import './routes/Chats'
-import './routes/Combos'
-import './routes/Cuotas'
-import './routes/EspecialidadMaquinarias'
-import './routes/Especialidades'
-import './routes/Evidencias'
-import './routes/Facturas'
-import './routes/GPS'
-import './routes/Mantenimientos'
-import './routes/Municipios'
-import './routes/Obras'
-import './routes/ObrasMunicipios'
-import './routes/Polizas'
-import './routes/ProcedimientoMantenimientos'
-import './routes/Procedimientos'
-import './routes/Operarios'
-import './routes/OperarioEspecialidades'
-import './routes/MaquinaCombos'
-import './routes/GobernantesDepartamentos'
-import './routes/GobernantesMunicipios'
-import './routes/Seguros'
-import './routes/Novedades'
+// Agrupar todas las rutas con el middleware MsSecMid
+Route.group(() => {
+  import('./routes/Maquinas')
+  import('./routes/Mensajes')
+  import('./routes/Departamentos')
+  import('./routes/Gobernantes')
+  import('./routes/Chats')
+  import('./routes/Servicios')
+  import('./routes/Turnos')
+  import('./routes/TipoServicios')
+  import('./routes/Combos')
+  import('./routes/Cuotas')
+  import('./routes/EspecialidadMaquinarias')
+  import('./routes/Especialidades')
+  import('./routes/Evidencias')
+  import('./routes/Facturas')
+  import('./routes/GPS')
+  import('./routes/Mantenimientos')
+  import('./routes/Municipios')
+  import('./routes/Obras')
+  import('./routes/ObrasMunicipios')
+  import('./routes/Polizas')
+  import('./routes/ProcedimientoMantenimientos')
+  import('./routes/Procedimientos')
+  import('./routes/Operarios')
+  import('./routes/OperarioEspecialidades')
+  import('./routes/MaquinaCombos')
+  import('./routes/GobernantesDepartamentos')
+  import('./routes/GobernantesMunicipios')
+  import('./routes/Seguros')
+  import('./routes/Novedades')
+}).middleware('MsSecMid')
